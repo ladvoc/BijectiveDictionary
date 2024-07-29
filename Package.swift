@@ -16,5 +16,6 @@ let package = Package(
             name: "BijectiveDictionaryTests",
             dependencies: ["BijectiveDictionary"]
         ),
-    ]
+    ],
+    swiftLanguageVersions: [.v6]
 )
