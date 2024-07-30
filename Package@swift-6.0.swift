@@ -1,4 +1,4 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
@@ -11,14 +11,12 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "BijectiveDictionary",
-            swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
+            name: "BijectiveDictionary"
         ),
         .testTarget(
             name: "BijectiveDictionaryTests",
-            dependencies: ["BijectiveDictionary"],
-            swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
+            dependencies: ["BijectiveDictionary"]
         ),
     ],
-    swiftLanguageVersions: [.v5]
+    swiftLanguageVersions: [.v6]
 )

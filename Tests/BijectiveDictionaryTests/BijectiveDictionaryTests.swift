@@ -6,8 +6,8 @@
 //  Copyright © 2024 Jacob Gelman. All rights reserved.
 //  =============================================================
 
+#if swift(>=6.0)
 import Testing
-import XCTest
 @testable import BijectiveDictionary
 
 @Test func createEmpty() {
@@ -197,3 +197,4 @@ func collection(dict: BijectiveDictionary<String, Int>) {
     let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
     #expect(Set(dict.rightValues) == [1, 2, 3])
 }
+#endif
