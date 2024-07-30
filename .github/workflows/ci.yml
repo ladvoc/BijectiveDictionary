@@ -1,13 +1,32 @@
+name: CI
 on:
   pull_request:
   workflow_dispatch:
 jobs:
-  test:
+  main:
+    name: Build & Test (Swift v${{ matrix.swift }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        swift: ["5"]
+    steps:
+      - name: "Use Swift v${{ matrix.swift }}"
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: ${{ matrix.swift }}
+      - name: Display Swift version
+        run: swift --version
+      - name: Build
+        run: swift build
+      # Testing only supported with Swift >= 6.0
+  beta:
+    name: Build & Test (beta)
     runs-on: macos-14
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Use Xcode beta
+      - name: Use Swift v6.0
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: "16.0-beta"
