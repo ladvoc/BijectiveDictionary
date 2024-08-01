@@ -40,7 +40,7 @@ let package = Package(
     name: "MyPackage",
     dependencies: [
         .package(
-            url: "https://github.com/ladvoc/swift-bijective-dictionary.git",
+            url: "https://github.com/ladvoc/BijectiveDictionary.git",
             .upToNextMinor(from: "0.1.0")
         )
     ],
