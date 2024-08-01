@@ -48,7 +48,7 @@ let package = Package(
         .target(
             name: "MyTarget",
             dependencies: [
-                .product(name: "BijectiveDictionary", package: "swift-bijective-dictionary")
+                .product(name: "BijectiveDictionary", package: "BijectiveDictionary")
             ]
         )
     ]
