@@ -3,17 +3,24 @@
 [![Supported Swift versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fladvoc%2FBijectiveDictionary%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/ladvoc/BijectiveDictionary)
 [![Supported swift platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fladvoc%2FBijectiveDictionary%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/ladvoc/BijectiveDictionary)
 
-A bijective dictionary is like a standard dictionary but offers bidirectional O(1) access
-at the cost of increased memory usage. This is useful in situations where time efficiency of reverse lookups is a key consideration.
+A bijective dictionary is a specialized dictionary that offers efficient bidirectional access in O(1) time, making it ideal for scenarios where the performance of reverse lookups is a key consideration. However,
+this comes at the cost of increased memory usage.
 
-## Simple Example
+[Documentation »](https://swiftpackageindex.com/ladvoc/BijectiveDictionary/main/documentation/bijectivedictionary)
 
-`BijectiveDictionary`'s API is designed to closely resemble that of `Dictionary` from the standard library. The follow demonstrates creating a bijective dictionary from a dictionary literal which maps time zones to their corresponding UTC offsets:
+## Basic Usage
+
+Bijective dictionary closely mirrors the standard dictionary type from the standard library,
+sharing many of the same initializers, methods, and properties. The key distinction lies in its
+ability to access elements bidirectionally. In a bijective dictionary, keys and values are referred
+to as “left values” and “right values” respectively, to avoid confusion, since either can be used
+to access the other.
+
+The following example demonstrates creating a bijective dictionary from a dictionary literal
+that maps time zones to their corresponding UTC offsets:
 
 ```swift
-import BijectiveDictionary
-
-let timeZones: BijectiveDictionary = [
+var timeZones: BijectiveDictionary = [
     "America/Los_Angeles": -8,
     "Europe/London": 0
     "Europe/Kiev": 2,
@@ -21,11 +28,19 @@ let timeZones: BijectiveDictionary = [
 ]
 ```
 
-An entry in `timeZones` can be accessed either by its left value (time zone) or right value (UTC offset):
+With the dictionary constructed, an entry in `timeZones` can be accessed either by its left
+value (time zone) or right value (UTC offset):
 
 ```swift
 print(timeZones[left: "America/Los_Angeles"]) // prints -8
 print(timeZones[right: 2]) // prints "Europe/Kiev"
+```
+
+The same subscripts can also be used to set values when the dictionary is mutable:
+
+```swift
+timeZones[left: "Asia/Seoul"] = 9
+timeZones[right: 9.5] = "Australia/Darwin"
 ```
 
 ## Installation

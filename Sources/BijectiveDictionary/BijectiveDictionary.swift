@@ -8,27 +8,55 @@
 
 /// A collection whose elements are left-right pairs.
 ///
-/// A bijective dictionary is like a standard dictionary but offers bidirectional O(1) access
-/// at the cost of increased memory usage—useful when time efficiency of reverse lookups
-/// is a key consideration.
+/// A bijective dictionary is a specialized dictionary that offers efficient bidirectional access
+/// in O(1) time, making it ideal for scenarios where the performance of reverse lookups is a
+/// key consideration. However, this comes at the cost of increased memory usage.
 ///
-/// A bijective dictionary's keys are values are referred to as "left values" and "right values"
-/// respectively to avoid confusion since either can be used to access the other.
+/// Bijective dictionary closely mirrors the standard dictionary type from the standard library,
+/// sharing many of the same initializers, methods, and properties. The key distinction lies in its
+/// ability to access elements bidirectionally. In a bijective dictionary, keys and values are referred
+/// to as “left values” and “right values” respectively, to avoid confusion, since either can be used
+/// to access the other.
+///
+/// The following example demonstrates creating a bijective dictionary from a dictionary literal
+/// that maps time zones to their corresponding UTC offsets:
+/// ```swift
+/// var timeZones: BijectiveDictionary = [
+///     "America/Los_Angeles": -8,
+///     "Europe/London": 0
+///     "Europe/Kiev": 2,
+///     "Asia/Singapore": 8
+/// ]
+/// ```
+///
+/// With the dictionary constructed, an entry in `timeZones` can be accessed either by its left
+/// value (time zone) or right value (UTC offset):
+/// ```swift
+/// print(timeZones[left: "America/Los_Angeles"]) // prints -8
+/// print(timeZones[right: 2]) // prints "Europe/Kiev"
+/// ```
+///
+/// The same subscripts can also be used to set values when the dictionary is mutable:
+/// ```swift
+///  timeZones[left: "Asia/Seoul"] = 9
+///  timeZones[right: 9.5] = "Australia/Darwin"
+/// ```
+///
 public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
-    
+
     /// Internal dictionary mapping left values to right values.
     @usableFromInline internal var _ltr: [Left: Right]
-    
+
     /// Internal dictionary mapping right values to left values.
     @usableFromInline internal var _rtl: [Right: Left]
-    
+
     /// The total number of key-value pairs that the dictionary can contain without
     /// allocating new storage.
     @inlinable public var capacity: Int {
         assert(_ltr.capacity == _rtl.capacity)
         return _ltr.capacity
     }
-    
+
     /// Reserves enough space to store the specified number of left-right pairs.
     ///
     /// If you are adding a known number of left-right pairs to a dictionary, use this
@@ -41,7 +69,7 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
         _ltr.reserveCapacity(minimumCapacity)
         _rtl.reserveCapacity(minimumCapacity)
     }
-    
+
     /// Removes the given right value and its associated left value from the dictionary.
     ///
     /// - Parameter rightValue: The right value to remove along with its associated left value.
@@ -57,7 +85,7 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
         _ltr.removeValue(forKey: leftValue)
         return leftValue
     }
-    
+
     /// Removes the given left value and its associated right value from the dictionary.
     ///
     /// - Parameter leftValue: The left value to remove along with its associated right value.
@@ -73,9 +101,9 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
         _rtl.removeValue(forKey: rightValue)
         return rightValue
     }
-    
+
     // TODO: add other useful methods from `Dictionary`.
-    
+
     /// Removes all left-right pairs from the dictionary.
     ///
     /// Calling this method invalidates all indices with respect to the
@@ -93,7 +121,7 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
         _ltr.removeAll(keepingCapacity: keepCapacity)
         _rtl.removeAll(keepingCapacity: keepCapacity)
     }
-    
+
     /// Accesses the right value associated with the given left value, falling back to the
     /// given default right value if the left value isn't found.
     ///
@@ -105,7 +133,7 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
         set(right) { self[left: leftValue] = right }
         get { self[left: leftValue] ?? defaultValue() }
     }
-    
+
     /// Accesses the left value associated with the given right value, falling back to the
     /// given default left value if the right value isn't found.
     ///
@@ -117,14 +145,14 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
         set(left) { self[right: rightValue] = left }
         get { self[right: rightValue] ?? defaultValue() }
     }
-    
+
     /// Accesses the right value associated with the given left value for reading and writing.
     ///
     /// - Complexity: O(1).
     @inlinable public subscript(left leftValue: Left) -> Right? {
         set(rightValue) {
             defer { _invariantCheck() }
-            
+
             guard let rightValue else {
                 // Right value being set to `nil`.
                 guard let existing = _ltr[leftValue] else { return }
@@ -132,7 +160,7 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
                 _ltr[leftValue] = nil
                 return
             }
-            
+
             if let replacedLeft = _rtl.updateValue(leftValue, forKey: rightValue),
                 replacedLeft != leftValue {
                 _ltr[replacedLeft] = nil
@@ -146,14 +174,14 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
             _ltr[leftValue]
         }
     }
-    
+
     /// Accesses the left value associated with the given right value for reading and writing.
     ///
     /// - Complexity: O(1).
     @inlinable public subscript(right rightValue: Right) -> Left? {
         set(leftValue) {
             defer { _invariantCheck() }
-            
+
             guard let leftValue else {
                 // Left value being set to `nil`.
                 guard let existing = _rtl[rightValue] else { return }
@@ -161,7 +189,7 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
                 _rtl[rightValue] = nil
                 return
             }
-            
+
             if let replacedLeft = _rtl.updateValue(leftValue, forKey: rightValue),
                 replacedLeft != leftValue {
                 _ltr[replacedLeft] = nil
