@@ -7,6 +7,7 @@
 //  =============================================================
 
 #if swift(>=6.0)
+import Foundation
 import Testing
 @testable import BijectiveDictionary
 
@@ -196,5 +197,42 @@ func collection(dict: BijectiveDictionary<String, Int>) {
 @Test func rightValues() {
     let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
     #expect(Set(dict.rightValues) == [1, 2, 3])
+}
+
+@Test("Encodable behavior should be equivalent to `Dictionary`")
+func encodableConformance() throws {
+    let dict = ["A": 1, "B": 2, "C": 3]
+    let bijectiveDict = BijectiveDictionary(dict)
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+    
+    let dictData = try encoder.encode(dict)
+    guard let dictJSONString = String(data: dictData, encoding: .utf8) else {
+        Issue.record(); return
+    }
+    
+    let bijectiveDictData = try encoder.encode(bijectiveDict)
+    guard let bijectiveDictJSONString = String(data: bijectiveDictData, encoding: .utf8) else {
+        Issue.record(); return
+    }
+    #expect(dictData == bijectiveDictData)
+    #expect(dictJSONString == bijectiveDictJSONString)
+}
+
+@Test("Decodable behavior should be equivalent to `Dictionary`")
+func decodableConformance() throws {
+    let jsonData = """
+{
+    "A": 1,
+    "B": 2,
+    "C": 3
+}
+""".data(using: .utf8)!
+    
+    let decoder = JSONDecoder()
+    let decoded = try decoder.decode(BijectiveDictionary<String, Int>.self, from: jsonData)
+    
+    let control = BijectiveDictionary(["A": 1, "B": 2, "C": 3])
+    #expect(decoded == control)
 }
 #endif

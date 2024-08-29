@@ -204,3 +204,40 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
         }
     }
 }
+
+
+extension BijectiveDictionary: Encodable where Left: Encodable, Right: Encodable {
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(_ltr)
+    }
+}
+
+
+extension BijectiveDictionary: Decodable where Left: Decodable, Right: Decodable {
+    
+    
+    /// Decodes a bijective dictionary from a standard dictionary
+    ///
+    /// Initialization is delegated to ``init(_:)``. Therefore you should expect identical performance.
+    /// - Complexity: O(*n*), where *n* is the number of key-value pairs in the
+    ///   given dictionary.
+    ///
+    /// - Parameter decoder: the decoder used to decode the standard dictionary
+    /// - Throws: `DecodingError.dataCorruptedError` if the given dictionary does not have unique values.
+    /// `DecodingError.typeMismatch` if the encountered stored value is not a single value container.
+    /// `DecodingError.valueNotFound` if the encountered encoded value is null.`
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawKeyedDictionary = try container.decode([Left: Right].self)
+        
+        guard let dict = Self(rawKeyedDictionary) else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "The decoded dictionary must have unique keys and unique values."
+            )
+        }
+        self = dict
+    }
+}
+
