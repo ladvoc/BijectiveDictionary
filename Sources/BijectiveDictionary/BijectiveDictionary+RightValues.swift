@@ -23,7 +23,22 @@ extension BijectiveDictionary {
     
     /// A collection containing just the right values of the dictionary.
     ///
+    /// When iterated over, order of the right values is not guaranteed. This may change
+    /// in a future release.
+    /// ```swift
+    /// let countryCodes: BijectiveDictionary = ["TW": "Taiwan", "AR": "Argentina"]
+    /// print(countryCodes)
+    /// // Prints "["AR": "Argentina", "TW": "Taiwan"]"
+    ///
+    /// for right in countryCodes.rightValues {
+    ///     print(right)
+    /// }
+    /// // Prints "Argentina"
+    /// // Prints "Taiwan"
+    /// ```
+    ///
     /// - Complexity: O(1)
+    ///
     @inlinable
     public var rightValues: RightValues {
         RightValues(_rtl)
