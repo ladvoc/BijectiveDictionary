@@ -60,8 +60,26 @@ extension BijectiveDictionary.RightValues: Sequence {
 }
 
 // MARK: - Collection
-
-// TODO: implement collection
+extension BijectiveDictionary.RightValues: Collection {
+  public typealias Index = Dictionary<Right, Left>.Index
+  public typealias Element = Right
+  
+  public var startIndex: Dictionary<Right, Left>.Index {
+    return _rtl.keys.startIndex
+  }
+  
+  public var endIndex: Dictionary<Right, Left>.Index {
+    return _rtl.keys.endIndex
+  }
+  
+  public func index(after i: Dictionary<Right, Left>.Index) -> Dictionary<Right, Left>.Index {
+    return _rtl.keys.index(after: i)
+  }
+  
+  public subscript(index: Dictionary<Right, Left>.Index) -> Right {
+    get { return _rtl.keys[index] }
+  }
+}
 
 // MARK: - Other Conformances
 
