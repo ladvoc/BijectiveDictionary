@@ -13,11 +13,11 @@ extension BijectiveDictionary {
     public struct RightValues {
         
         @usableFromInline
-        internal let _rtl: Dictionary<Right, Left>
+        internal let _ltr: Dictionary<Left, Right>
         
         @inlinable
-        internal init(_ rtl: Dictionary<Right, Left>) {
-            self._rtl = rtl
+        internal init(_ ltr: Dictionary<Left, Right>) {
+            self._ltr = ltr
         }
     }
     
@@ -41,7 +41,7 @@ extension BijectiveDictionary {
     ///
     @inlinable
     public var rightValues: RightValues {
-        RightValues(_rtl)
+        RightValues(_ltr)
     }
 }
 
@@ -55,22 +55,22 @@ extension BijectiveDictionary.RightValues: Sequence {
     public struct Iterator: IteratorProtocol {
         
         @usableFromInline
-        internal var keysIterator: Dictionary<Right, Left>.Keys.Iterator
+        internal var valuesIterator: Dictionary<Left, Right>.Values.Iterator
         
         @inlinable
-        internal init(keysIterator: Dictionary<Right, Left>.Keys.Iterator) {
-            self.keysIterator = keysIterator
+        internal init(valuesIterator: Dictionary<Left, Right>.Values.Iterator) {
+            self.valuesIterator = valuesIterator
         }
         
         @inlinable
         public mutating func next() -> Right? {
-            keysIterator.next()
+            valuesIterator.next()
         }
     }
     
     @inlinable
     public func makeIterator() -> Iterator {
-        Iterator(keysIterator: _rtl.keys.makeIterator())
+        Iterator(valuesIterator: _ltr.values.makeIterator())
     }
 }
 
@@ -81,11 +81,11 @@ extension BijectiveDictionary.RightValues: Sequence {
 // MARK: - Other Conformances
 
 extension BijectiveDictionary.RightValues: CustomStringConvertible {
-    public var description: String { _rtl.keys.description }
+    public var description: String { _ltr.values.description }
 }
 
 extension BijectiveDictionary.RightValues: CustomDebugStringConvertible {
-    public var debugDescription: String { _rtl.keys.debugDescription }
+    public var debugDescription: String { _ltr.values.debugDescription }
 }
 
 extension BijectiveDictionary.RightValues: Sendable
