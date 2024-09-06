@@ -17,7 +17,7 @@ to as “left values” and “right values” respectively, to avoid confusion,
 to access the other.
 
 The following example demonstrates creating a bijective dictionary from a dictionary literal
-that maps time zones to their corresponding UTC offsets:
+that maps IANA time zones to their corresponding UTC offsets (not considering daylight savings time):
 
 ```swift
 var timeZones: BijectiveDictionary = [
@@ -40,7 +40,7 @@ The same subscripts can also be used to set values when the dictionary is mutabl
 
 ```swift
 timeZones[left: "Asia/Seoul"] = 9
-timeZones[right: 9.5] = "Australia/Darwin"
+timeZones[right: -9] = "America/Anchorage"
 ```
 
 ## Installation

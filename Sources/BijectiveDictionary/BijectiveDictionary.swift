@@ -19,7 +19,7 @@
 /// to access the other.
 ///
 /// The following example demonstrates creating a bijective dictionary from a dictionary literal
-/// that maps time zones to their corresponding UTC offsets:
+/// that maps IANA time zones to their corresponding UTC offsets (not considering daylight savings time):
 /// ```swift
 /// var timeZones: BijectiveDictionary = [
 ///     "America/Los_Angeles": -8,
@@ -38,8 +38,8 @@
 ///
 /// The same subscripts can also be used to set values when the dictionary is mutable:
 /// ```swift
-///  timeZones[left: "Asia/Seoul"] = 9
-///  timeZones[right: 9.5] = "Australia/Darwin"
+/// timeZones[left: "Asia/Seoul"] = 9
+/// timeZones[right: -9] = "America/Anchorage"
 /// ```
 ///
 public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
