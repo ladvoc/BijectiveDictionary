@@ -23,8 +23,9 @@ extension BijectiveDictionary {
     
     /// A collection containing just the left values of the dictionary.
     ///
-    /// When iterated over, order of the left values is not guaranteed. This may change
-    /// in a future release.
+    /// When iterated over, left values appear in this collection in the same order as they occur in the
+    /// dictionary’s left-right pairs. Each left value is unique.
+    ///
     /// ```swift
     /// let countryCodes: BijectiveDictionary = ["TW": "Taiwan", "AR": "Argentina"]
     /// print(countryCodes)
