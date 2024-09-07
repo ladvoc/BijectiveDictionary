@@ -175,6 +175,7 @@ func sequence(dict: BijectiveDictionary<String, Int>) {
     
     for (leftValue, rightValue) in dict {
         #expect(dict[left: leftValue] == rightValue)
+        #expect(dict[right: rightValue] == leftValue)
     }
 }
 
@@ -198,6 +199,17 @@ func collection(dict: BijectiveDictionary<String, Int>) {
     let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
     #expect(Set(dict.rightValues) == [1, 2, 3])
 }
+
+@Test("leftValues and rightValues should have the same order")
+func leftRightValues() {
+    let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
+    let leftRightZip = zip(dict.leftValues, dict.rightValues)
+    for (leftV, rightV) in leftRightZip {
+        #expect(dict[left: leftV] == rightV)
+        #expect(dict[right: rightV] == leftV)
+    }
+}
+
 
 @Test("Encodable behavior should be equivalent to `Dictionary`")
 func encodableConformance() throws {
@@ -234,5 +246,29 @@ func decodableConformance() throws {
     
     let control = BijectiveDictionary(["A": 1, "B": 2, "C": 3])
     #expect(decoded == control)
+}
+
+@Test
+func testAThousand() {
+    var bijectiveDict = BijectiveDictionary<Int, String>(minimumCapacity: 1000)
+    for i in 0..<1000 {
+        bijectiveDict[left: i] = String(i)
+        #expect(bijectiveDict[left: i] == String(i))
+        #expect(bijectiveDict[right: String(i)] == i)
+    }
+    #expect(bijectiveDict.count == 1000)
+    for leftV in bijectiveDict.leftValues {
+        print("leftV: \(leftV)")
+    }
+    for rightV in bijectiveDict.rightValues {
+        print("rightV: \(rightV)")
+    }
+    
+    // assert that leftValues and rightValues have the same order
+    let leftRightZip = zip(bijectiveDict.leftValues, bijectiveDict.rightValues)
+    for (leftV, rightV) in leftRightZip {
+        #expect(bijectiveDict[left: leftV] == rightV)
+        #expect(bijectiveDict[right: rightV] == leftV)
+    }
 }
 #endif
