@@ -9,13 +9,18 @@ let package = Package(
             name: "BijectiveDictionary",
             targets: ["BijectiveDictionary"])
     ],
+    dependencies: [
+        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.56.2")
+    ],
     targets: [
         .target(
-            name: "BijectiveDictionary"
+            name: "BijectiveDictionary",
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
         ),
         .testTarget(
             name: "BijectiveDictionaryTests",
-            dependencies: ["BijectiveDictionary"]
+            dependencies: ["BijectiveDictionary"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
         ),
     ],
     swiftLanguageVersions: [.v6]
