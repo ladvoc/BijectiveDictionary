@@ -36,7 +36,7 @@ import Testing
 }
 
 @Test(arguments: [[:], ["A": 1, "B": 2, "C": 3]])
-func fromStandardDictionary(standardDict: Dictionary<String, Int>) throws {
+func fromStandardDictionary(standardDict: [String: Int]) throws {
     let dict = try #require(BijectiveDictionary(standardDict))
     #expect(dict.count == standardDict.count)
 }
@@ -222,7 +222,6 @@ func leftRightValues() {
     }
 }
 
-
 @Test("Encodable behavior should be equivalent to `Dictionary`")
 func encodableConformance() throws {
     let dict = ["A": 1, "B": 2, "C": 3]
@@ -231,27 +230,18 @@ func encodableConformance() throws {
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
     
     let dictData = try encoder.encode(dict)
-    guard let dictJSONString = String(data: dictData, encoding: .utf8) else {
-        Issue.record(); return
-    }
+    let dictJSONString = String(decoding: dictData, as: UTF8.self)
     
     let bijectiveDictData = try encoder.encode(bijectiveDict)
-    guard let bijectiveDictJSONString = String(data: bijectiveDictData, encoding: .utf8) else {
-        Issue.record(); return
-    }
+    let bijectiveDictJSONString = String(decoding: bijectiveDictData, as: UTF8.self)
+
     #expect(dictData == bijectiveDictData)
     #expect(dictJSONString == bijectiveDictJSONString)
 }
 
 @Test("Decodable behavior should be equivalent to `Dictionary`")
 func decodableConformance() throws {
-    let jsonData = """
-{
-    "A": 1,
-    "B": 2,
-    "C": 3
-}
-""".data(using: .utf8)!
+    let jsonData = Data(#"{ "A": 1, "B": 2, "C": 3 }"#.utf8)
     
     let decoder = JSONDecoder()
     let decoded = try decoder.decode(BijectiveDictionary<String, Int>.self, from: jsonData)
@@ -263,10 +253,10 @@ func decodableConformance() throws {
 @Test
 func testAThousand() {
     var bijectiveDict = BijectiveDictionary<Int, String>(minimumCapacity: 1000)
-    for i in 0..<1000 {
-        bijectiveDict[left: i] = String(i)
-        #expect(bijectiveDict[left: i] == String(i))
-        #expect(bijectiveDict[right: String(i)] == i)
+    for index in 0..<1000 {
+        bijectiveDict[left: index] = String(index)
+        #expect(bijectiveDict[left: index] == String(index))
+        #expect(bijectiveDict[right: String(index)] == index)
     }
     #expect(bijectiveDict.count == 1000)
     for leftV in bijectiveDict.leftValues {
