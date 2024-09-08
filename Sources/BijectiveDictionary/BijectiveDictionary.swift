@@ -102,8 +102,6 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
         return rightValue
     }
 
-    // TODO: add other useful methods from `Dictionary`.
-
     /// Removes all left-right pairs from the dictionary.
     ///
     /// Calling this method invalidates all indices with respect to the

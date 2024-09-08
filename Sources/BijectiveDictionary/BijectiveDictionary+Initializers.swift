@@ -63,8 +63,6 @@ extension BijectiveDictionary {
         }
         _invariantCheck()
     }
-    
-    // TODO: add other useful initializers from `Dictionary`.
 }
 
 extension Dictionary {
