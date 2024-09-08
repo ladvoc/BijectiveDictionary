@@ -32,6 +32,11 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: "16.0-beta"
+      # TODO: enable this step once linting rules are configured and warnings/errors are fixed
+      # - name: Lint
+      #   uses: norio-nomura/action-swiftlint@3.2.1
+      #  with:
+      #    args: --strict
       - name: Build
         run: swift build
       - name: Test
