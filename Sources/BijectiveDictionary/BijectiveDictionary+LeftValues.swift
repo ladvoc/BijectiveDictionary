@@ -23,7 +23,23 @@ extension BijectiveDictionary {
     
     /// A collection containing just the left values of the dictionary.
     ///
+    /// When iterated over, left values appear in this collection in the same order as they occur in the
+    /// dictionary’s left-right pairs. Each left value is unique.
+    ///
+    /// ```swift
+    /// let countryCodes: BijectiveDictionary = ["TW": "Taiwan", "AR": "Argentina"]
+    /// print(countryCodes)
+    /// // Prints "["AR": "Argentina", "TW": "Taiwan"]"
+    ///
+    /// for left in countryCodes.leftValues {
+    ///     print(left)
+    /// }
+    /// // Prints "AR"
+    /// // Prints "TW"
+    /// ```
+    ///
     /// - Complexity: O(1)
+    ///
     @inlinable
     public var leftValues: LeftValues {
         LeftValues(_ltr)
