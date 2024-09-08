@@ -50,7 +50,7 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
     /// Internal dictionary mapping right values to left values.
     @usableFromInline internal var _rtl: [Right: Left]
 
-    /// The total number of key-value pairs that the dictionary can contain without
+    /// The total number of left-right pairs that the dictionary can contain without
     /// allocating new storage.
     @inlinable public var capacity: Int {
         assert(_ltr.capacity == _rtl.capacity)
