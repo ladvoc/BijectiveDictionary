@@ -76,8 +76,23 @@ extension BijectiveDictionary.LeftValues: Sequence {
 }
 
 // MARK: - Collection
-
-// TODO: implement collection
+extension BijectiveDictionary.LeftValues: Collection {
+    
+    public typealias Index = BijectiveDictionary<Left, Right>.Index
+    
+    @inlinable public var startIndex: Index { Index(_ltr.startIndex) }
+    @inlinable public var endIndex: Index { Index(_ltr.endIndex) }
+    
+    @inlinable
+    public func index(after i: Index) -> Index {
+        Index(_ltr.index(after: i._ltrIndex))
+    }
+    
+    @inlinable
+    public subscript(position: Index) -> Left {
+        _ltr[position._ltrIndex].key
+    }
+}
 
 // MARK: - Other Conformances
 

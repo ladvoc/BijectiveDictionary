@@ -193,11 +193,23 @@ func collection(dict: BijectiveDictionary<String, Int>) {
 @Test func leftValues() {
     let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
     #expect(Set(dict.leftValues) == ["A", "B", "C"])
+  
+    let leftValues = dict.leftValues
+    let assertions = ["A", "B", "C"]
+    for assertion in assertions {
+        #expect(leftValues.contains(assertion))
+    }
 }
 
 @Test func rightValues() {
     let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
     #expect(Set(dict.rightValues) == [1, 2, 3])
+  
+    let rightValues = dict.rightValues
+    let assertions = [1, 2, 3]
+    for assertion in assertions {
+        #expect(rightValues.contains(assertion))
+    }
 }
 
 @Test("leftValues and rightValues should have the same order")
