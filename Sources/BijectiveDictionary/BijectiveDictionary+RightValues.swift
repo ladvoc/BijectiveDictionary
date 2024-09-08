@@ -77,26 +77,22 @@ extension BijectiveDictionary.RightValues: Sequence {
 
 // MARK: - Collection
 extension BijectiveDictionary.RightValues: Collection {
-  public typealias Index = Dictionary<Right, Left>.Index
-  public typealias Element = Right
-  
-  public var startIndex: Dictionary<Right, Left>.Index {
-    return _rtl.keys.startIndex
-  }
-  
-  public var endIndex: Dictionary<Right, Left>.Index {
-    return _rtl.keys.endIndex
-  }
-  
-  public func index(after i: Dictionary<Right, Left>.Index) -> Dictionary<Right, Left>.Index {
-    return _rtl.keys.index(after: i)
-  }
-  
-  public subscript(index: Dictionary<Right, Left>.Index) -> Right {
-    get { return _rtl.keys[index] }
-  }
+    
+    public typealias Index = BijectiveDictionary<Left, Right>.Index
+    
+    @inlinable public var startIndex: Index { Index(_ltr.startIndex) }
+    @inlinable public var endIndex: Index { Index(_ltr.endIndex) }
+    
+    @inlinable
+    public func index(after i: Index) -> Index {
+        Index(_ltr.index(after: i._ltrIndex))
+    }
+    
+    @inlinable
+    public subscript(position: Index) -> Right {
+        _ltr[position._ltrIndex].value
+    }
 }
-
 // MARK: - Other Conformances
 
 extension BijectiveDictionary.RightValues: CustomStringConvertible {
