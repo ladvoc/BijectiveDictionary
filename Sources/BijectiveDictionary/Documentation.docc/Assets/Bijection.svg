@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns" xmlns="http://www.w3.org/2000/svg" height="200" width="200" version="1.1"> 
+	<title>Bijection</title>
+	<defs>
+		<style type="text/css">.ellipse  { stroke-width: 2.0; stroke: black; fill: none; }
+    .setlabel { font-size: 18pt; text-anchor: middle; }
+    .xelement { font-size: 14pt; text-anchor: middle; }
+    .yelement { font-size: 14pt; text-anchor: middle; }
+    .map      { stroke-width: 1.0; stroke: black; fill: none; marker-end: url(#arrow); }
+    .arrow    { fill: black; }</style>
+		<marker id="arrow" refY="4" refX="3" orient="auto" markerWidth="4" markerHeight="8">
+			<polyline points="0 0 4 4 0 8" class="arrow"/>
+		</marker>
+	</defs>
+	<ellipse rx="40" ry="80" class="ellipse" cy="110" cx="50"/>
+	<text y="26" x="50" class="setlabel">
+		<tspan>X</tspan>
+	</text>
+	<g style="text-anchor:middle" transform="translate(-8)" class="xelement" font-size="17.5px">
+		<text y="60" x="50">1</text>
+		<text y="95" x="50">2</text>
+		<text y="130" x="50">3</text>
+		<text y="165" x="50">4</text>
+	</g>
+	<ellipse rx="40" ry="80" class="ellipse" cy="110" cx="150"/>
+	<text y="26" x="150" class="setlabel">Y</text>
+	<g style="text-anchor:middle" transform="translate(8)" class="yelement" font-size="17.5px">
+		<text y="60" x="150">D</text>
+		<text y="95" x="150">B</text>
+		<text y="130" x="150">C</text>
+		<text y="165" x="150">A</text>
+	</g>
+	<g stroke="#000">
+		<line y2="53" marker-end="url(#arrow)" x2="142" y1="53" x1="57"/>
+		<line y2="88" marker-end="url(#arrow)" x2="142" y1="88" x1="57"/>
+		<line y2="123" marker-end="url(#arrow)" x2="142" y1="123" x1="57"/>
+		<line y2="158" marker-end="url(#arrow)" x2="142" y1="158" x1="57"/>
+	</g>
+	<g stroke-width="0">
+		<path d="m63.81 58.24a8.137 8.137 0 1 1 -16.27 0 8.137 8.137 0 1 1 16.27 0z" transform="matrix(.1579 0 0 .1579 43.32 43.77)"/>
+		<path d="m63.81 58.24a8.137 8.137 0 1 1 -16.27 0 8.137 8.137 0 1 1 16.27 0z" transform="matrix(.1579 0 0 .1579 43.32 79.04)"/>
+		<path d="m63.81 58.24a8.137 8.137 0 1 1 -16.27 0 8.137 8.137 0 1 1 16.27 0z" transform="matrix(.1579 0 0 .1579 43.32 114.1)"/>
+		<path d="m63.81 58.24a8.137 8.137 0 1 1 -16.27 0 8.137 8.137 0 1 1 16.27 0z" transform="matrix(.1579 0 0 .1579 43.32 149.3)"/>
+	</g>
+	<g transform="translate(95.7 .03212)" stroke-width="0">
+		<path d="m63.81 58.24a8.137 8.137 0 0 1 -8.137 8.137 8.137 8.137 0 0 1 -8.137 -8.137 8.137 8.137 0 0 1 8.137 -8.137 8.137 8.137 0 0 1 8.137 8.137z" transform="matrix(.1579 0 0 .1579 43.32 43.77)"/>
+		<path d="m63.81 58.24a8.137 8.137 0 0 1 -8.137 8.137 8.137 8.137 0 0 1 -8.137 -8.137 8.137 8.137 0 0 1 8.137 -8.137 8.137 8.137 0 0 1 8.137 8.137z" transform="matrix(.1579 0 0 .1579 43.32 79.04)"/>
+		<path d="m63.81 58.24a8.137 8.137 0 0 1 -8.137 8.137 8.137 8.137 0 0 1 -8.137 -8.137 8.137 8.137 0 0 1 8.137 -8.137 8.137 8.137 0 0 1 8.137 8.137z" transform="matrix(.1579 0 0 .1579 43.32 114.1)"/>
+		<path d="m63.81 58.24a8.137 8.137 0 0 1 -8.137 8.137 8.137 8.137 0 0 1 -8.137 -8.137 8.137 8.137 0 0 1 8.137 -8.137 8.137 8.137 0 0 1 8.137 8.137z" transform="matrix(.1579 0 0 .1579 43.32 149.3)"/>
+	</g>
+</svg>
