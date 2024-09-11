@@ -35,7 +35,7 @@ extension BijectiveDictionary {
     /// of left-right tuples with unique values on each side. Passing a sequence with duplicate
     /// values on either side to this initializer results in a runtime error. If your sequence might have duplicate
     /// keys, use the `BijectiveDictionary(_:uniquingKeysWith:)` initializer instead.
-    @inlinable public init<S>(uniqueLeftRightPairs pairs: S) where S : Sequence, S.Element == (Left, Right) {
+    @inlinable public init<S>(uniqueLeftRightPairs pairs: S) where S: Sequence, S.Element == (Left, Right) {
         defer { _invariantCheck() }
         self._ltr = Dictionary(uniqueKeysWithValues: pairs)
         let reversePairs = pairs.lazy.map { pair in (pair.1, pair.0) }
@@ -63,8 +63,6 @@ extension BijectiveDictionary {
         }
         _invariantCheck()
     }
-    
-    // TODO: add other useful initializers from `Dictionary`.
 }
 
 extension Dictionary {

@@ -36,7 +36,7 @@ import Testing
 }
 
 @Test(arguments: [[:], ["A": 1, "B": 2, "C": 3]])
-func fromStandardDictionary(standardDict: Dictionary<String, Int>) throws {
+func fromStandardDictionary(standardDict: [String: Int]) throws {
     let dict = try #require(BijectiveDictionary(standardDict))
     #expect(dict.count == standardDict.count)
 }
@@ -175,6 +175,7 @@ func sequence(dict: BijectiveDictionary<String, Int>) {
     
     for (leftValue, rightValue) in dict {
         #expect(dict[left: leftValue] == rightValue)
+        #expect(dict[right: rightValue] == leftValue)
     }
 }
 
@@ -192,11 +193,33 @@ func collection(dict: BijectiveDictionary<String, Int>) {
 @Test func leftValues() {
     let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
     #expect(Set(dict.leftValues) == ["A", "B", "C"])
+  
+    let leftValues = dict.leftValues
+    let assertions = ["A", "B", "C"]
+    for assertion in assertions {
+        #expect(leftValues.contains(assertion))
+    }
 }
 
 @Test func rightValues() {
     let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
     #expect(Set(dict.rightValues) == [1, 2, 3])
+  
+    let rightValues = dict.rightValues
+    let assertions = [1, 2, 3]
+    for assertion in assertions {
+        #expect(rightValues.contains(assertion))
+    }
+}
+
+@Test("leftValues and rightValues should have the same order")
+func leftRightValues() {
+    let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
+    let leftRightZip = zip(dict.leftValues, dict.rightValues)
+    for (leftV, rightV) in leftRightZip {
+        #expect(dict[left: leftV] == rightV)
+        #expect(dict[right: rightV] == leftV)
+    }
 }
 
 @Test("Encodable behavior should be equivalent to `Dictionary`")
@@ -207,32 +230,47 @@ func encodableConformance() throws {
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
     
     let dictData = try encoder.encode(dict)
-    guard let dictJSONString = String(data: dictData, encoding: .utf8) else {
-        Issue.record(); return
-    }
+    let dictJSONString = String(decoding: dictData, as: UTF8.self)
     
     let bijectiveDictData = try encoder.encode(bijectiveDict)
-    guard let bijectiveDictJSONString = String(data: bijectiveDictData, encoding: .utf8) else {
-        Issue.record(); return
-    }
+    let bijectiveDictJSONString = String(decoding: bijectiveDictData, as: UTF8.self)
+
     #expect(dictData == bijectiveDictData)
     #expect(dictJSONString == bijectiveDictJSONString)
 }
 
 @Test("Decodable behavior should be equivalent to `Dictionary`")
 func decodableConformance() throws {
-    let jsonData = """
-{
-    "A": 1,
-    "B": 2,
-    "C": 3
-}
-""".data(using: .utf8)!
+    let jsonData = Data(#"{ "A": 1, "B": 2, "C": 3 }"#.utf8)
     
     let decoder = JSONDecoder()
     let decoded = try decoder.decode(BijectiveDictionary<String, Int>.self, from: jsonData)
     
     let control = BijectiveDictionary(["A": 1, "B": 2, "C": 3])
     #expect(decoded == control)
+}
+
+@Test
+func testAThousand() {
+    var bijectiveDict = BijectiveDictionary<Int, String>(minimumCapacity: 1000)
+    for index in 0..<1000 {
+        bijectiveDict[left: index] = String(index)
+        #expect(bijectiveDict[left: index] == String(index))
+        #expect(bijectiveDict[right: String(index)] == index)
+    }
+    #expect(bijectiveDict.count == 1000)
+    for leftV in bijectiveDict.leftValues {
+        print("leftV: \(leftV)")
+    }
+    for rightV in bijectiveDict.rightValues {
+        print("rightV: \(rightV)")
+    }
+    
+    // assert that leftValues and rightValues have the same order
+    let leftRightZip = zip(bijectiveDict.leftValues, bijectiveDict.rightValues)
+    for (leftV, rightV) in leftRightZip {
+        #expect(bijectiveDict[left: leftV] == rightV)
+        #expect(bijectiveDict[right: rightV] == leftV)
+    }
 }
 #endif

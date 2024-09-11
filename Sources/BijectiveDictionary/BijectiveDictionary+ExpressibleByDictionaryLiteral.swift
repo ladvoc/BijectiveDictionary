@@ -8,9 +8,11 @@
 
 extension BijectiveDictionary: ExpressibleByDictionaryLiteral {
     
+    /// Creates a new BijectiveDictionary from a dictionary literal.
+    ///
+    /// >Warning: Both left and right values must be unique or else this will fatal error.
     public init(dictionaryLiteral elements: (Left, Right)...) {
-        self.init()
-        reserveCapacity(elements.count)
+        self.init(minimumCapacity: elements.count)
         
         for (leftKey, rightKey) in elements {
             guard _ltr.updateValue(rightKey, forKey: leftKey) == nil else {

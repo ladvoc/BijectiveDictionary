@@ -13,18 +13,19 @@ extension BijectiveDictionary {
     public struct LeftValues {
         
         @usableFromInline
-        internal let _ltr: Dictionary<Left, Right>
+        internal let _ltr: [Left: Right]
         
         @inlinable
-        internal init(_ ltr: Dictionary<Left, Right>) {
+        internal init(_ ltr: [Left: Right]) {
             self._ltr = ltr
         }
     }
     
     /// A collection containing just the left values of the dictionary.
     ///
-    /// When iterated over, order of the left values is not guaranteed. This may change
-    /// in a future release.
+    /// When iterated over, left values appear in this collection in the same order as they occur in the
+    /// dictionary’s left-right pairs. Each left value is unique.
+    ///
     /// ```swift
     /// let countryCodes: BijectiveDictionary = ["TW": "Taiwan", "AR": "Argentina"]
     /// print(countryCodes)
@@ -75,8 +76,24 @@ extension BijectiveDictionary.LeftValues: Sequence {
 }
 
 // MARK: - Collection
-
-// TODO: implement collection
+extension BijectiveDictionary.LeftValues: Collection {
+    
+    public typealias Index = BijectiveDictionary<Left, Right>.Index
+    
+    @inlinable public var startIndex: Index { Index(_ltr.startIndex) }
+    @inlinable public var endIndex: Index { Index(_ltr.endIndex) }
+    
+    @inlinable
+    public func index(after i: Index) -> Index {
+        // swiftlint:disable:previous identifier_name
+        Index(_ltr.index(after: i._ltrIndex))
+    }
+    
+    @inlinable
+    public subscript(position: Index) -> Left {
+        _ltr[position._ltrIndex].key
+    }
+}
 
 // MARK: - Other Conformances
 
