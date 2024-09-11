@@ -10,6 +10,12 @@ Because `BijectiveDictionary` is generic, you will also need to somewhere declar
 let bDict = BijectiveDictionary<String, Int>()
 ```
 
+Or an empty `BijectiveDictionary` can also be created with a literal. However, this will require that you explicitly declare the type (unless it can be inferred elsewhere). 
+
+```swift
+let bDict: BijectiveDictionary<String, Int> = [:]
+```
+
 ### Reserving Capacity
 An empty dictionary can also be created with a minimum capacity using ``BijectiveDictionary/init(minimumCapacity:)``. Remember that, (just like a standard `Dictionary`) when a `BijectiveDictionary` exceeds it's capacity, it must reallocate its storage buffer under the hood. This reallocation is automatic and you do not need to remember to do it, but it is not free. It is good to avoid this work, if you know in advance that you will have a large number of items. 
 
@@ -22,6 +28,9 @@ let bDict = BijectiveDictionary<String, Int>(minimumCapacity: 10_000)
 See: ``BijectiveDictionary/init(dictionaryLiteral:)``
 
 ``BijectiveDictionary`` conforms to `ExpressibleByDictionaryLiteral` and therefore can be initialized with common `Dictionary` syntax. (Note, this creates a `BijectiveDictionary` directly, and does not create any `Dictionary`.) In practice, this is one of the easiest ways to create a `BijectiveDictionary`.  
+
+># Warning
+>The dictionary literal used here must not contain any duplicates in the left or right values or else this initializer will fatal error. 
 ```swift
 let bDict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
 ```
