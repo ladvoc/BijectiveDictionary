@@ -32,7 +32,7 @@ See: ``BijectiveDictionary/init(dictionaryLiteral:)``
 ># Warning
 >The dictionary literal used here must not contain any duplicates in the left or right values or else this initializer will fatal error. 
 ```swift
-let bDict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
+let bDict: BijectiveDictionary<String, Int> = ["A": 1, "B": 2, "C": 3]
 ```
 
 
