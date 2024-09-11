@@ -56,7 +56,7 @@ extension BijectiveDictionary {
     /// ```
     @inlinable
     public func conflict(with pair: Element) -> Conflict? {
-        let existing = (findByLeft(pair.left), findByRight(pair.right))
+        let existing = (findPairByLeft(pair.left), findPairByRight(pair.right))
         return switch existing {
         case (nil, nil): nil
         case (nil, .some): .right
@@ -68,19 +68,5 @@ extension BijectiveDictionary {
                 .pair
             }
         }
-    }
-    
-    /// Find a pair in the dictionary by left value.
-    @inlinable
-    internal func findByLeft(_ leftValue: Left) -> Element? {
-        guard let rightValue = self[left: leftValue] else { return nil }
-        return (leftValue, rightValue)
-    }
-    
-    /// Find a pair in the dictionary by right value.
-    @inlinable
-    internal func findByRight(_ rightValue: Right) -> Element? {
-        guard let leftValue = self[right: rightValue] else { return nil }
-        return (leftValue, rightValue)
     }
 }
