@@ -13,10 +13,10 @@ extension BijectiveDictionary {
     public struct LeftValues {
         
         @usableFromInline
-        internal let _ltr: Dictionary<Left, Right>
+        internal let _ltr: [Left: Right]
         
         @inlinable
-        internal init(_ ltr: Dictionary<Left, Right>) {
+        internal init(_ ltr: [Left: Right]) {
             self._ltr = ltr
         }
     }
@@ -85,6 +85,7 @@ extension BijectiveDictionary.LeftValues: Collection {
     
     @inlinable
     public func index(after i: Index) -> Index {
+        // swiftlint:disable:previous identifier_name
         Index(_ltr.index(after: i._ltrIndex))
     }
     

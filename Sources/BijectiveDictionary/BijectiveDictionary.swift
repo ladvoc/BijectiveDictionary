@@ -102,8 +102,6 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
         return rightValue
     }
 
-    // TODO: add other useful methods from `Dictionary`.
-
     /// Removes all left-right pairs from the dictionary.
     ///
     /// Calling this method invalidates all indices with respect to the
@@ -130,8 +128,8 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
         left leftValue: Left,
         default defaultValue: @autoclosure () -> Right
     ) -> Right {
-        set(right) { self[left: leftValue] = right }
         get { self[left: leftValue] ?? defaultValue() }
+        set(right) { self[left: leftValue] = right }
     }
 
     /// Accesses the left value associated with the given right value, falling back to the
@@ -142,14 +140,17 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
         right rightValue: Right,
         default defaultValue: @autoclosure () -> Left
     ) -> Left {
-        set(left) { self[right: rightValue] = left }
         get { self[right: rightValue] ?? defaultValue() }
+        set(left) { self[right: rightValue] = left }
     }
 
     /// Accesses the right value associated with the given left value for reading and writing.
     ///
     /// - Complexity: O(1).
     @inlinable public subscript(left leftValue: Left) -> Right? {
+        get {
+            _ltr[leftValue]
+        }
         set(rightValue) {
             defer { _invariantCheck() }
 
@@ -170,15 +171,15 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
                 _rtl[replacedRight] = nil
             }
         }
-        get {
-            _ltr[leftValue]
-        }
     }
 
     /// Accesses the left value associated with the given right value for reading and writing.
     ///
     /// - Complexity: O(1).
     @inlinable public subscript(right rightValue: Right) -> Left? {
+        get {
+            _rtl[rightValue]
+        }
         set(leftValue) {
             defer { _invariantCheck() }
 
@@ -199,12 +200,8 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
                 _rtl[replacedRight] = nil
             }
         }
-        get {
-            _rtl[rightValue]
-        }
     }
 }
-
 
 extension BijectiveDictionary: Encodable where Left: Encodable, Right: Encodable {
     public func encode(to encoder: any Encoder) throws {
@@ -213,9 +210,7 @@ extension BijectiveDictionary: Encodable where Left: Encodable, Right: Encodable
     }
 }
 
-
 extension BijectiveDictionary: Decodable where Left: Decodable, Right: Decodable {
-    
     
     /// Decodes a bijective dictionary from a standard dictionary
     ///
@@ -240,4 +235,3 @@ extension BijectiveDictionary: Decodable where Left: Decodable, Right: Decodable
         self = dict
     }
 }
-

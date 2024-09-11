@@ -33,6 +33,7 @@ extension BijectiveDictionary: Collection {
         return (left: element.key, right: element.value)
     }
     
+    // swiftlint:disable:next identifier_name
     @inlinable public func index(after i: Index) -> Index {
         Index(_ltr.index(after: i._ltrIndex))
     }

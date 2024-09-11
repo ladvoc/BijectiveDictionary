@@ -11,7 +11,6 @@ extension BijectiveDictionary {
         @usableFromInline @inline(never)
         internal func _invariantCheck() {
             assert(_ltr.count == _rtl.count, "Internal dictionaries should always have same count after update.")
-            // TODO: check keys and values.
             for (leftKey, leftValue) in _ltr {
                 assert(
                     _rtl[leftValue] == leftKey,
