@@ -273,4 +273,30 @@ func testAThousand() {
         #expect(bijectiveDict[right: rightV] == leftV)
     }
 }
+
+@Test
+func findPairByLeft() {
+    let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
+    #expect(dict.findPairByLeft("A")?.left == "A")
+    #expect(dict.findPairByLeft("A")?.right == 1)
+    #expect(dict.findPairByLeft("D") == nil)
+}
+
+@Test
+func findPairByRight() {
+    let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
+    #expect(dict.findPairByRight(1)?.left == "A")
+    #expect(dict.findPairByRight(1)?.right == 1)
+    #expect(dict.findPairByRight(4) == nil)
+}
+
+@Test
+func conflict() {
+    let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
+    #expect(dict.conflict(with: ("D", 4)) == nil)
+    #expect(dict.conflict(with: ("A", 0)) == .left)
+    #expect(dict.conflict(with: ("E", 1)) == .right)
+    #expect(dict.conflict(with: ("A", 1)) == .pair)
+    #expect(dict.conflict(with: ("A", 3)) == .both(otherLeft: "C", otherRight: 1))
+}
 #endif

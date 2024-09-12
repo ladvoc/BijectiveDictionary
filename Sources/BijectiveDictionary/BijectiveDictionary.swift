@@ -201,6 +201,18 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
             }
         }
     }
+    
+    /// Find a left-right pair in the dictionary by left value.
+    @inlinable public func findPairByLeft(_ leftValue: Left) -> Element? {
+        guard let rightValue = self[left: leftValue] else { return nil }
+        return (leftValue, rightValue)
+    }
+    
+    /// Find a left-right pair in the dictionary by right value.
+    @inlinable public func findPairByRight(_ rightValue: Right) -> Element? {
+        guard let leftValue = self[right: rightValue] else { return nil }
+        return (leftValue, rightValue)
+    }
 }
 
 extension BijectiveDictionary: Encodable where Left: Encodable, Right: Encodable {
