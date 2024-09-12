@@ -9,6 +9,9 @@ let package = Package(
             name: "BijectiveDictionary",
             targets: ["BijectiveDictionary"])
     ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-collections-benchmark", from: "0.0.3"),
+    ],
     targets: [
         .target(
             name: "BijectiveDictionary",
@@ -19,6 +22,13 @@ let package = Package(
             dependencies: ["BijectiveDictionary"],
             swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
         ),
+        .executableTarget(
+            name: "BijectiveDictionaryBenchmark",
+            dependencies: [
+                "BijectiveDictionary",
+                .product(name: "CollectionsBenchmark", package: "swift-collections-benchmark"),
+            ]
+        )
     ],
     swiftLanguageVersions: [.v5]
 )

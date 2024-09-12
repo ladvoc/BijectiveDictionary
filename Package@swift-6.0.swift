@@ -9,6 +9,9 @@ let package = Package(
             name: "BijectiveDictionary",
             targets: ["BijectiveDictionary"])
     ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-collections-benchmark", from: "0.0.3"),
+    ],
     targets: [
         .target(
             name: "BijectiveDictionary"
@@ -17,6 +20,13 @@ let package = Package(
             name: "BijectiveDictionaryTests",
             dependencies: ["BijectiveDictionary"]
         ),
+        .executableTarget(
+            name: "BijectiveDictionaryBenchmark",
+            dependencies: [
+                "BijectiveDictionary",
+                .product(name: "CollectionsBenchmark", package: "swift-collections-benchmark"),
+            ]
+        ),
     ],
-    swiftLanguageVersions: [.v6]
+    swiftLanguageModes: [.v6]
 )
