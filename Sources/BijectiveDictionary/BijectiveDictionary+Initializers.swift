@@ -47,17 +47,17 @@ extension BijectiveDictionary {
     /// Creates a new dictionary from the left-right pairs in the given sequence, using a combining
     /// to resolve conflicts.
     /// - Parameters:
-    ///   - leftRightPairs: A sequence of left-right pairs to use for the new dictionary.
+    ///   - pairs: A sequence of left-right pairs to use for the new dictionary.
     ///   - combine: A closure that is called when a conflict is encountered, receiving the left-right pair
     ///     and a description of the conflict that exists.
     /// - Note: If the combine closure does not resolve the conflict for a given left-right pair, then that left-right
     ///   pair will be excluded from the new dictionary.
     @inlinable public init<S>(
-        _ leftRightPairs: S,
+        _ pairs: S,
         uniquingWith combine: (Element, Conflict) throws -> Element
     ) rethrows where S: Sequence, S.Element == Element {
         self.init()
-        for pair in leftRightPairs {
+        for pair in pairs {
             guard let pair = try {
                 guard let conflictResult = conflict(with: pair) else { return pair }
                 let resolution = try combine(pair, conflictResult)
@@ -72,13 +72,13 @@ extension BijectiveDictionary {
     
     /// Creates a new dictionary from the left-right pairs in the given sequence, discarding any conflicting pairs.
     ///
-    /// - Parameter leftRightPairs: A sequence of left-right pairs to use for the new dictionary.
+    /// - Parameter pairs: A sequence of left-right pairs to use for the new dictionary.
     /// - Complexity: O(*n*), where *n* is the number of key-value pairs in the given sequence.
     @inlinable public init<S>(
-        discardConflicting leftRightPairs: S
+        discardConflicting pairs: S
     ) where S: Sequence, S.Element == Element {
         self.init()
-        for pair in leftRightPairs where conflict(with: pair) == nil {
+        for pair in pairs where conflict(with: pair) == nil {
             _ltr[pair.left] = pair.right
             _rtl[pair.right] = pair.left
         }
