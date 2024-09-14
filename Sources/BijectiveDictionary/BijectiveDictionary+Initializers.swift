@@ -34,7 +34,7 @@ extension BijectiveDictionary {
     /// You use this initializer to create a dictionary when you have a sequence
     /// of left-right tuples with unique values on each side. Passing a sequence with duplicate
     /// values on either side to this initializer results in a runtime error. If your sequence might have duplicate
-    /// keys, use the `BijectiveDictionary(_:uniquingKeysWith:)` initializer instead.
+    /// left or right values, use the `BijectiveDictionary(_:uniquingWith:)` initializer instead.
     ///
     /// - Precondition: The sequence must not have duplicate left or right values.
     @inlinable public init<S>(uniqueLeftRightPairs pairs: S) where S: Sequence, S.Element == (Left, Right) {
