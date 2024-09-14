@@ -44,6 +44,21 @@ extension BijectiveDictionary {
         self._rtl = Dictionary(uniqueKeysWithValues: reversePairs)
     }
     
+    /// Creates a new dictionary from the left-right pairs in the given sequence, discarding any conflicting pairs.
+    ///
+    /// - Parameter leftRightPairs: A sequence of left-right pairs to use for the new dictionary.
+    /// - Complexity: O(*n*), where *n* is the number of key-value pairs in the given sequence.
+    @inlinable public init<S>(
+        discardConflicting leftRightPairs: S
+    ) where S: Sequence, S.Element == Element {
+        self.init()
+        for pair in leftRightPairs where conflict(with: pair) == nil {
+            _ltr[pair.left] = pair.right
+            _rtl[pair.right] = pair.left
+        }
+        _invariantCheck()
+    }
+    
     /// Creates a bijective dictionary from a standard dictionary.
     ///
     /// Unlike a standard dictionary which only requires its keys be unique, a bijective
