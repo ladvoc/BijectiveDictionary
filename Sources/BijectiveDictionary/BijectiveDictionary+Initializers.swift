@@ -56,7 +56,7 @@ extension BijectiveDictionary {
         _ pairs: S,
         uniquingWith combine: (Element, Conflict) throws -> Element
     ) rethrows where S: Sequence, S.Element == Element {
-        self.init()
+        self.init(minimumCapacity: pairs.underestimatedCount)
         for pair in pairs {
             guard let pair = try {
                 guard let conflictResult = conflict(with: pair) else { return pair }
@@ -77,7 +77,7 @@ extension BijectiveDictionary {
     @inlinable public init<S>(
         discardConflicting pairs: S
     ) where S: Sequence, S.Element == Element {
-        self.init()
+        self.init(minimumCapacity: pairs.underestimatedCount)
         for pair in pairs where conflict(with: pair) == nil {
             _ltr[pair.left] = pair.right
             _rtl[pair.right] = pair.left
