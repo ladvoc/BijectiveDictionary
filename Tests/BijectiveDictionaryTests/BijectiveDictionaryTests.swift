@@ -301,6 +301,87 @@ func conflict() {
 }
 
 @Test
+func uniquingWithNoConflicts() {
+    let pairs = [("A", 1), ("B", 2), ("C", 3)]
+    var conflicts = [BijectiveDictionary<String, Int>.Conflict]()
+    
+    let dict = BijectiveDictionary(pairs) { pair, conflict  in
+        conflicts.append(conflict)
+        return pair
+    }
+    #expect(dict == ["A": 1, "B": 2, "C": 3])
+    #expect(conflicts == [])
+}
+
+@Test
+func uniquingWithConflictingRightValues() {
+    let pairs = [("A", 1), ("B", 1), ("C", 3), ("D", 4), ("E", 3)]
+    var conflicts = [BijectiveDictionary<String, Int>.Conflict]()
+    
+    let dict = BijectiveDictionary(pairs) { pair, conflict in
+        conflicts.append(conflict)
+        return (pair.left, -conflicts.count)
+    }
+    
+    #expect(dict == ["A": 1, "B": -1, "C": 3, "D": 4, "E": -2])
+    #expect(conflicts == [.right, .right])
+}
+
+@Test
+func uniquingWithConflictingLeftValues() {
+    let pairs = [(1, "A"), (1, "B"), (3, "C"), (4, "D"), (3, "E")]
+    var conflicts = [BijectiveDictionary<Int, String>.Conflict]()
+    
+    let dict = BijectiveDictionary(pairs) { pair, conflict in
+        conflicts.append(conflict)
+        return (-conflicts.count, pair.right)
+    }
+    
+    #expect(dict == [1: "A", -1: "B", 3: "C", 4: "D", -2: "E"])
+    #expect(conflicts == [.left, .left])
+}
+
+@Test
+func uniquingWithConflictingPairs() {
+    let pairs = [(1, 2), (1, 2), (3, 4), (3, 4)]
+    var conflicts = [BijectiveDictionary<Int, Int>.Conflict]()
+    
+    let dict = BijectiveDictionary(pairs) { _, conflict in
+        conflicts.append(conflict)
+        return (-conflicts.count, -conflicts.count)
+    }
+    
+    #expect(dict == [1: 2, -1: -1, 3: 4, -2: -2])
+    #expect(conflicts == [.pair, .pair])
+}
+
+@Test
+func uniquingWithNoResolve() {
+    let pairs = [("A", 1), ("A", 2), ("C", 3), ("D", 3)]
+    var conflicts = [BijectiveDictionary<String, Int>.Conflict]()
+    
+    let dict = BijectiveDictionary(pairs) { pair, conflict in
+        conflicts.append(conflict)
+        return pair
+    }
+    
+    #expect(dict == ["A": 1, "C": 3])
+    #expect(conflicts == [.left, .right])
+}
+
+@Test
+func uniquingWithProvidesPair() {
+    let pairs = [("A", 1), ("A", 1), ("B", 1)]
+    var leftValues = [String]()
+    
+    _ = BijectiveDictionary(pairs) { pair, _  in
+        leftValues.append(pair.left)
+        return pair
+    }
+    #expect(leftValues == ["A", "B"])
+}
+
+@Test
 func discardConflicting() {
     let pairs = [("A", 1), ("B", 1), ("A", 10), ("C", 4), ("C", 4), ("E", 5), ("A", 5)]
     let dict = BijectiveDictionary(discardConflicting: pairs)

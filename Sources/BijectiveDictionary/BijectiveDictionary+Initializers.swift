@@ -44,6 +44,32 @@ extension BijectiveDictionary {
         self._rtl = Dictionary(uniqueKeysWithValues: reversePairs)
     }
     
+    /// Creates a new dictionary from the left-right pairs in the given sequence, using a combining
+    /// to resolve conflicts.
+    /// - Parameters:
+    ///   - leftRightPairs: A sequence of left-right pairs to use for the new dictionary.
+    ///   - combine: A closure that is called when a conflict is encountered, receiving the left-right pair
+    ///     and a description of the conflict that exists.
+    /// - Note: If the combine closure does not resolve the conflict for a given left-right pair, then that left-right
+    ///   pair will be excluded from the new dictionary.
+    @inlinable public init<S>(
+        _ leftRightPairs: S,
+        uniquingWith combine: (Element, Conflict) throws -> Element
+    ) rethrows where S: Sequence, S.Element == Element {
+        self.init()
+        for pair in leftRightPairs {
+            guard let pair = try {
+                guard let conflictResult = conflict(with: pair) else { return pair }
+                let resolution = try combine(pair, conflictResult)
+                return conflict(with: resolution) == nil ? resolution : nil
+            }() else { continue }
+            
+            _ltr[pair.left] = pair.right
+            _rtl[pair.right] = pair.left
+        }
+        _invariantCheck()
+    }
+    
     /// Creates a new dictionary from the left-right pairs in the given sequence, discarding any conflicting pairs.
     ///
     /// - Parameter leftRightPairs: A sequence of left-right pairs to use for the new dictionary.
