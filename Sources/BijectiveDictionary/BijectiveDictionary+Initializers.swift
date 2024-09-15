@@ -75,7 +75,7 @@ extension BijectiveDictionary {
     /// - Parameter pairs: A sequence of left-right pairs to use for the new dictionary.
     /// - Complexity: O(*n*), where *n* is the number of key-value pairs in the given sequence.
     @inlinable public init<S>(
-        discardConflicting pairs: S
+        discardingConflicts pairs: S
     ) where S: Sequence, S.Element == Element {
         self.init(minimumCapacity: pairs.underestimatedCount)
         for pair in pairs where conflict(with: pair) == nil {

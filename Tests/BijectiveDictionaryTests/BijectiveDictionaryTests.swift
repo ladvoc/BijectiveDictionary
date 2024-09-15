@@ -384,7 +384,7 @@ func uniquingWithProvidesPair() {
 @Test
 func discardConflicting() {
     let pairs = [("A", 1), ("B", 1), ("A", 10), ("C", 4), ("C", 4), ("E", 5), ("A", 5)]
-    let dict = BijectiveDictionary(discardConflicting: pairs)
+    let dict = BijectiveDictionary(discardingConflicts: pairs)
     #expect(dict == ["A": 1, "C": 4, "E": 5])
 }
 #endif
