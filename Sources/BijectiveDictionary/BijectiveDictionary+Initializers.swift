@@ -34,7 +34,7 @@ extension BijectiveDictionary {
     /// You use this initializer to create a dictionary when you have a sequence
     /// of left-right tuples with unique values on each side. Passing a sequence with duplicate
     /// values on either side to this initializer results in a runtime error. If your sequence might have duplicate
-    /// keys, use the `BijectiveDictionary(_:uniquingKeysWith:)` initializer instead.
+    /// left or right values, use the `BijectiveDictionary(_:uniquingWith:)` initializer instead.
     ///
     /// - Precondition: The sequence must not have duplicate left or right values.
     @inlinable public init<S>(uniqueLeftRightPairs pairs: S) where S: Sequence, S.Element == (Left, Right) {
@@ -42,6 +42,47 @@ extension BijectiveDictionary {
         self._ltr = Dictionary(uniqueKeysWithValues: pairs)
         let reversePairs = pairs.lazy.map { pair in (pair.1, pair.0) }
         self._rtl = Dictionary(uniqueKeysWithValues: reversePairs)
+    }
+    
+    /// Creates a new dictionary from the left-right pairs in the given sequence, using a combining
+    /// to resolve conflicts.
+    /// - Parameters:
+    ///   - pairs: A sequence of left-right pairs to use for the new dictionary.
+    ///   - combine: A closure that is called when a conflict is encountered, receiving the left-right pair
+    ///     and a description of the conflict that exists.
+    /// - Note: If the combine closure does not resolve the conflict for a given left-right pair, then that left-right
+    ///   pair will be excluded from the new dictionary.
+    @inlinable public init<S>(
+        _ pairs: S,
+        uniquingWith combine: (Element, Conflict) throws -> Element
+    ) rethrows where S: Sequence, S.Element == Element {
+        self.init(minimumCapacity: pairs.underestimatedCount)
+        for pair in pairs {
+            guard let pair = try {
+                guard let conflictResult = conflict(with: pair) else { return pair }
+                let resolution = try combine(pair, conflictResult)
+                return conflict(with: resolution) == nil ? resolution : nil
+            }() else { continue }
+            
+            _ltr[pair.left] = pair.right
+            _rtl[pair.right] = pair.left
+        }
+        _invariantCheck()
+    }
+    
+    /// Creates a new dictionary from the left-right pairs in the given sequence, discarding any conflicting pairs.
+    ///
+    /// - Parameter pairs: A sequence of left-right pairs to use for the new dictionary.
+    /// - Complexity: O(*n*), where *n* is the number of key-value pairs in the given sequence.
+    @inlinable public init<S>(
+        discardingConflicts pairs: S
+    ) where S: Sequence, S.Element == Element {
+        self.init(minimumCapacity: pairs.underestimatedCount)
+        for pair in pairs where conflict(with: pair) == nil {
+            _ltr[pair.left] = pair.right
+            _rtl[pair.right] = pair.left
+        }
+        _invariantCheck()
     }
     
     /// Creates a bijective dictionary from a standard dictionary.
