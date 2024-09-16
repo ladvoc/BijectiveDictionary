@@ -39,6 +39,7 @@ import Testing
 func fromStandardDictionary(standardDict: [String: Int]) throws {
     let dict = try #require(BijectiveDictionary(standardDict))
     #expect(dict.count == standardDict.count)
+    #expect(dict == standardDict) // I'm not sure why this works.
 }
 
 @Test func fromStandardDictionaryInvalid() {
