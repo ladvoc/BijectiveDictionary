@@ -299,4 +299,27 @@ func conflict() {
     #expect(dict.conflict(with: ("A", 1)) == .pair)
     #expect(dict.conflict(with: ("A", 3)) == .both(otherLeft: "C", otherRight: 1))
 }
+
+@Test func buildWithNoConflicts() {
+    let pairs = [("A", 1), ("B", 2), ("C", 3), ("D", 4)]
+    let actual = BijectiveDictionary.build(from: pairs)
+    let expected = BijectiveDictionaryBuildResults.success(["A": 1, "B": 2, "C": 3, "D": 4])
+    #expect(actual == expected)
+}
+
+@Test(arguments: [
+    ([("A", 1), ("B", 2), ("C", 3), ("A", 4)], BijectiveDictionaryBuildResults.conflicts(
+        ["A": 1, "B": 2, "C": 3],
+        conflicts: [("A", 4)]
+    )),
+    ([("A", 1), ("A", 2), ("C", 3), ("D", 3)], BijectiveDictionaryBuildResults.conflicts(
+        ["A": 1, "C": 3],
+        conflicts: [("A", 2), ("D", 3)]
+    ))
+])
+func buildWithConflicts(pairs: [(String, Int)], expected: BijectiveDictionaryBuildResults<String, Int>) {
+    let pairs = pairs
+    let actual = BijectiveDictionary.build(from: pairs)
+    #expect(actual == expected)
+}
 #endif
