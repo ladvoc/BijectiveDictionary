@@ -45,9 +45,9 @@ public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
         guard let leftIndex = _ltr.firstIndex(of: leftValue) else {
             return nil
         }
-        _rtl.remove(at: leftIndex)
-        let rightValue = _rtl[leftIndex]
         _ltr.remove(at: leftIndex)
+        let rightValue = _rtl[leftIndex]
+        _rtl.remove(at: leftIndex)
         return rightValue
     }
     
@@ -77,7 +77,7 @@ public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
             guard let leftIndex = _ltr.firstIndex(of: leftValue) else {
                 return nil
             }
-            return _rtl[leftIndex]
+            return _rtl[safe: leftIndex]
         }
         set(newRightValue) {
             defer { _invariantCheck() } // unnecessary?
@@ -120,7 +120,7 @@ public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
             guard let rightIndex = _rtl.firstIndex(of: rightValue) else {
                 return nil
             }
-            return _ltr[rightIndex]
+            return _ltr[safe: rightIndex]
         }
         set(newLeftValue) {
             defer { _invariantCheck() }

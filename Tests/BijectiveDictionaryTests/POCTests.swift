@@ -146,4 +146,31 @@ func _hashable(dict: POCOrderedSetImplementation<String, Int>) {
     #expect(POCOrderedSetImplementation(standardDict)! == standardDict)
     #expect(standardDict == POCOrderedSetImplementation(standardDict)!)
 }
+
+@Test(arguments: [[:], ["A": 1, "B": 2, "C": 3]])
+func _removeAll(dict: POCOrderedSetImplementation<String, Int>) {
+    var dict = dict
+    dict.removeAll()
+    #expect(dict.isEmpty)
+}
+
+@Test func _removeByRight() {
+    var dict: POCOrderedSetImplementation = ["A": 1, "B": 2, "C": 3]
+    
+    #expect(dict.remove(byRight: 3) == "C")
+    #expect(dict[left: "C"] == nil)
+    #expect(dict[right: 3] == nil)
+    
+    #expect(dict.remove(byRight: 4) == nil)
+}
+
+@Test func _removeByLeft() {
+    var dict: POCOrderedSetImplementation = ["A": 1, "B": 2, "C": 3]
+    
+    #expect(dict.remove(byLeft: "C") == 3)
+    #expect(dict[left: "C"] == nil)
+    #expect(dict[right: 3] == nil)
+    
+    #expect(dict.remove(byLeft: "D") == nil)
+}
 #endif
