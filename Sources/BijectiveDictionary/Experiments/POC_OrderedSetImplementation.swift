@@ -72,9 +72,18 @@ public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
         }
         set(newRightValue) {
             defer { _invariantCheck() } // unnecessary?
-            
             guard let newRightValue else {
                 // Right value being set to `nil`.
+                
+                // I'm not sure what to do here.
+                // I don't think Left or Right is guaranteed to be an Optional here
+                guard let index = _ltr.firstIndex(of: leftValue) else {
+                    // setting right value to `nil`, by a non-existent left value
+                    return // do nothing
+                }
+                // nil right value, real left value
+                _ltr.remove(at: index) // remove both
+                _rtl.remove(at: index)
                 return
             }
             guard let index = _ltr.firstIndex(of: leftValue) else {
@@ -90,11 +99,10 @@ public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
             }
             
             // Updating left-right pair (by left)...
-            // We've already guaranteed that the left value is present
-            // so it will update (not append)
-            _ltr.updateOrAppend(leftValue)
-            let oldRightValue = _rtl[index]
-            
+//            // We've already guaranteed that the left value is present
+//            // so it will update (not append)
+//            _ltr.updateOrAppend(leftValue)
+            _rtl.elements[index] = newRightValue // O(n)
         }
     }
     
@@ -105,16 +113,40 @@ public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
             }
             return _ltr[rightIndex]
         }
-        set(leftValue) {
-            defer { _invariantCheck() } // unnecessary?
-            
-            guard let index = _rtl.firstIndex(of: rightValue) else { return }
-            guard let leftValue else {
+        set(newLeftValue) {
+            defer { _invariantCheck() }
+            guard let newLeftValue else {
                 // Left value being set to `nil`.
+                
+                // I'm not sure what to do here.
+                // I don't think Left or Right is guaranteed to be an Optional here
+                guard let index = _rtl.firstIndex(of: rightValue) else {
+                    // setting left value to `nil`, by a non-existent right value
+                    return // do nothing
+                }
+                // `nil` left value, real right value
+                _ltr.remove(at: index)
+                _rtl.remove(at: index)
+                return
+            }
+            guard let index = _rtl.firstIndex(of: rightValue) else {
+                // Inserting new left-right pair.
+                let (leftInserted, atLeftIndex) = _ltr.append(newLeftValue)
+                let (rightInserted, atRightIndex) = _rtl.append(rightValue)
+                
+                guard leftInserted == true, rightInserted == true,
+                      atLeftIndex == atRightIndex else {
+                    fatalError("error occured while inserting left value: \(newLeftValue) by right: \(rightValue) through subscript")
+                }
                 return
             }
             
-            // TODO: Update values
+            // Updating left-right pair (by right)...
+            _ltr.elements[index] = newLeftValue
+//            // We've already guaranteed that the right value is present
+//            // so it will update (not append)
+//            _rtl.updateOrAppend(rightValue)
+            
         }
     }
     

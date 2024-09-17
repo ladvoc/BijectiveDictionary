@@ -78,25 +78,15 @@ func _toStandardDictionary(dict: POCOrderedSetImplementation<String, Int>) {
     var dict: POCOrderedSetImplementation = ["A": 1, "B": 2, "C": 3]
     
     dict[left: "A"] = 4
-    withKnownIssue {
-        #expect(dict[left: "A"] == 4, "Value should persist after set operation")
-    }
-    withKnownIssue {
-        #expect(dict[right: 4] == "A", "Reverse mapping should hold")
-    }
-    withKnownIssue {
-        #expect(dict[right: 1] == nil, "Previous mapping should no longer hold")
-    }
+    #expect(dict[left: "A"] == 4, "Value should persist after set operation")
+    #expect(dict[right: 4] == "A", "Reverse mapping should hold")
+    #expect(dict[right: 1] == nil, "Previous mapping should no longer hold")
     
     dict[left: "A"] = 5
-    withKnownIssue {
-        #expect(dict[right: 1] == nil, "Previous mapping should no longer hold")
-    }
+    #expect(dict[right: 1] == nil, "Previous mapping should no longer hold")
     
     dict[left: "A"] = nil
-    withKnownIssue {
-        #expect(dict[left: "A"] == nil)
-    }
+    #expect(dict[left: "A"] == nil)
     
     dict[left: "D"] = nil
     #expect(dict[left: "D"] == nil)
@@ -106,25 +96,15 @@ func _toStandardDictionary(dict: POCOrderedSetImplementation<String, Int>) {
     var dict: POCOrderedSetImplementation = ["A": 1, "B": 2, "C": 3]
     
     dict[right: 3] = "D"
-    withKnownIssue {
-        #expect(dict[right: 3] == "D", "Value should persist after set operation")
-    }
-    withKnownIssue {
-        #expect(dict[left: "D"] == 3, "Reverse mapping should hold")
-    }
-    withKnownIssue {
-        #expect(dict[left: "C"] == nil, "Previous mapping should no longer hold")
-    }
+    #expect(dict[right: 3] == "D", "Value should persist after set operation")
+    #expect(dict[left: "D"] == 3, "Reverse mapping should hold")
+    #expect(dict[left: "C"] == nil, "Previous mapping should no longer hold")
     
     dict[right: 3] = "E"
-    withKnownIssue {
-        #expect(dict[right: 3] == "E")
-    }
+    #expect(dict[right: 3] == "E")
     
     dict[right: 3] = nil
-    withKnownIssue {
-        #expect(dict[right: 3] == nil)
-    }
+    #expect(dict[right: 3] == nil)
     
     dict[right: 4] = nil
     #expect(dict[right: 4] == nil)
