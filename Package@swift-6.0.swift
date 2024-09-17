@@ -1,11 +1,13 @@
 // swift-tools-version: 6.0
 import PackageDescription
 
-var dependencies: [Package.Dependency] = []
+var dependencies: [Package.Dependency] = [
+    .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.3"),
+]
 var plugins: [Target.PluginUsage]?
 
 #if os(macOS)
-dependencies = [.package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.56.2")]
+dependencies += [.package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.56.2")]
 plugins = [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
 #endif
 
@@ -21,6 +23,9 @@ let package = Package(
     targets: [
         .target(
             name: "BijectiveDictionary",
+            dependencies: [
+                .product(name: "OrderedCollections", package: "swift-collections"),
+            ],
             plugins: plugins
         ),
         .testTarget(
@@ -29,5 +34,5 @@ let package = Package(
             plugins: plugins
         ),
     ],
-    swiftLanguageVersions: [.v6]
+    swiftLanguageModes: [.v6]
 )

@@ -21,8 +21,9 @@ import Testing
     #expect(fromInit.count == 0)
 }
 
-@Test func createWithCapacity() {
-    let dict = BijectiveDictionary<String, Int>(minimumCapacity: 10)
+@Test(arguments: [10, 100, 1000, 10_000, 100_000, 1_000_000])
+func createWithCapacity(minimumCapacity: Int) {
+    let dict = BijectiveDictionary<String, Int>(minimumCapacity: minimumCapacity)
     #expect(dict.capacity >= 10)
 }
 
@@ -39,6 +40,7 @@ import Testing
 func fromStandardDictionary(standardDict: [String: Int]) throws {
     let dict = try #require(BijectiveDictionary(standardDict))
     #expect(dict.count == standardDict.count)
+    #expect(dict == standardDict) // I'm not sure why this works.
 }
 
 @Test func fromStandardDictionaryInvalid() {
