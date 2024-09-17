@@ -141,5 +141,9 @@ func _hashable(dict: POCOrderedSetImplementation<String, Int>) {
     #expect(dict != otherDict)
 }
 
-
+@Test func _equalWithStandardDictionary() {
+    let standardDict = ["A": 1, "B": 2, "C": 3]
+    #expect(POCOrderedSetImplementation(standardDict)! == standardDict)
+    #expect(standardDict == POCOrderedSetImplementation(standardDict)!)
+}
 #endif
