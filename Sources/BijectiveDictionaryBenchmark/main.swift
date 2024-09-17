@@ -114,11 +114,86 @@ benchmark.addSimple(
 }
 
 // MARK: Removal
+benchmark.add(
+    title: "BijectiveDictionary<Int, Int> remove all",
+    input: ([Int], [Int]).self
+) { input, removals in
+    return { timer in
+        let pairs = zip(input, input)
+        var dict = BijectiveDictionary<Int, Int>(uniqueLeftRightPairs: pairs)
+        timer.measure {
+            for i in removals {
+                dict.removeAll()
+            }
+        }
+        precondition(dict.isEmpty)
+        blackHole(dict)
+    }
+}
 
+benchmark.add(
+    title: "BijectiveDictionary<Int, Int> remove by left",
+    input: ([Int], [Int]).self
+) { input, removals in
+    return { timer in
+        let pairs = zip(input, input)
+        var dict = BijectiveDictionary<Int, Int>(uniqueLeftRightPairs: pairs)
+        timer.measure {
+            for i in removals {
+                dict.remove(byLeft: i)
+            }
+        }
+        precondition(dict.isEmpty)
+        blackHole(dict)
+    }
+}
+
+benchmark.add(
+    title: "BijectiveDictionary<Int, Int> remove by right",
+    input: ([Int], [Int]).self
+) { input, removals in
+    return { timer in
+        let pairs = zip(input, input)
+        var dict = BijectiveDictionary<Int, Int>(uniqueLeftRightPairs: pairs)
+        timer.measure {
+            for i in removals {
+                dict.remove(byRight: i)
+            }
+        }
+        precondition(dict.isEmpty)
+        blackHole(dict)
+    }
+}
+
+benchmark.add(
+    title: "BijectiveDictionary<Int, Int> random-access offset lookups by left",
+    input: ([Int], [Int]).self
+) { input, lookups in
+    return { timer in
+        let pairs = zip(input, input)
+        var dict = BijectiveDictionary<Int, Int>(uniqueLeftRightPairs: pairs)
+        timer.measure {
+            for i in lookups {
+                blackHole(dict[left: i])
+            }
         }
     }
 }
 
+benchmark.add(
+    title: "BijectiveDictionary<Int, Int> random-access offset lookups by right",
+    input: ([Int], [Int]).self
+) { input, lookups in
+    return { timer in
+        let pairs = zip(input, input)
+        var dict = BijectiveDictionary<Int, Int>(uniqueLeftRightPairs: pairs)
+        timer.measure {
+            for i in lookups {
+                blackHole(dict[right: i])
+            }
+        }
+    }
 }
+
 
 benchmark.main()
