@@ -34,5 +34,5 @@ let package = Package(
             plugins: plugins
         ),
     ],
-    swiftLanguageVersions: [.v6]
+    swiftLanguageModes: [.v6]
 )
