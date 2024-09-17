@@ -23,6 +23,9 @@ let package = Package(
     targets: [
         .target(
             name: "BijectiveDictionary",
+            dependencies: [
+                .product(name: "OrderedCollections", package: "swift-collections"),
+            ],
             swiftSettings: [.enableExperimentalFeature("StrictConcurrency")],
             plugins: plugins
         ),
