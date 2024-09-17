@@ -21,12 +21,11 @@ import Testing
     #expect(fromInit.count == 0)
 }
 
-@Test func _createWithCapacity() {
-    let dict = POCOrderedSetImplementation<String, Int>(minimumCapacity: 10)
+@Test(arguments: [10, 100, 1000, 10_000, 100_000, 1_000_000])
+func _createWithCapacity(minimumCapacity: Int) {
+    let dict = POCOrderedSetImplementation<String, Int>(minimumCapacity: minimumCapacity)
      
-    withKnownIssue {
-        #expect(dict.capacity >= 10) // OrderedSet doesn't have a built-in capacity property
-    }
+    #expect(dict.capacityView >= 10)
 }
 
 @Test func _fromUniqueLeftRightPairs() {

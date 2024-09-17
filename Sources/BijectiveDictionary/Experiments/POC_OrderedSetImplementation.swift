@@ -1,4 +1,3 @@
-
 import OrderedCollections
 
 public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
@@ -16,10 +15,12 @@ public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
         _rtl.firstIndex(of: rightValue)
     }
     
-    @available(*, deprecated)
-    @inlinable public var capacity: Int {
-        print("OrderedSet does not have built in capacity variable")
-        return 0
+    /// A view of the capacity of the ordered view
+    ///
+    /// `POCOrderedSetImplementation` is backed by two `OrderedSet`, which does not have a capacity property.
+    /// However it does have an `elements` array. `capacityView` returns the `capactity` of the `elements` array.
+    @inlinable public var capacityView: Int {
+        return _ltr.elements.capacity
     }
     
     @inlinable public mutating func reserveCapacity(_ minimumCapacity: Int) {
@@ -102,7 +103,9 @@ public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
                 
                 guard leftInserted == true, rightInserted == true,
                       atLeftIndex == atRightIndex else {
-                    fatalError("error occured while inserting right value: \(newRightValue) by left: \(leftValue) through subscript")
+                    fatalError("""
+error occured while inserting right value: \(newRightValue) by left: \(leftValue) through subscript
+""")
                 }
                 return
             }
@@ -145,7 +148,9 @@ public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
                 
                 guard leftInserted == true, rightInserted == true,
                       atLeftIndex == atRightIndex else {
-                    fatalError("error occured while inserting left value: \(newLeftValue) by right: \(rightValue) through subscript")
+                    fatalError("""
+error occured while inserting left value: \(newLeftValue) by right: \(rightValue) through subscript
+""")
                 }
                 return
             }
@@ -226,14 +231,15 @@ extension OrderedSet {
             let index = self.firstIndex(of: oldValue)
             return (replaced: false, index: index ?? -1)
         }
-        guard let index = self.firstIndex(of: oldValue) else {
-            // self does not contain old value (old value is not present in self)
+        
+        if self.contains(oldValue) {
+            // remove old value
+            // append new value
+            return (replaced: true, index: -1)
+        } else {
             return (replaced: false, index: -1)
+            
         }
         
-        // remove old value
-        // append new value
-        return (replaced: true, index: -1)
     }
 }
-

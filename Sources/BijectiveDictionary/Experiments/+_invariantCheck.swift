@@ -1,4 +1,3 @@
-
 extension POCOrderedSetImplementation {
 #if DEBUG
     @usableFromInline @inline(never)
