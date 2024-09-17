@@ -182,6 +182,29 @@ public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
 extension POCOrderedSetImplementation: Sendable
 where Left: Sendable, Right: Sendable {}
 
+// MARK: Codable
+extension POCOrderedSetImplementation: Encodable where Left: Encodable, Right: Encodable {
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(self.asDictionary)
+    }
+}
+
+extension POCOrderedSetImplementation: Decodable where Left: Decodable, Right: Decodable {
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawKeyedDictionary = try container.decode([Left: Right].self)
+        
+        guard let dict = Self(rawKeyedDictionary) else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "The decoded dictionary must have unique keys and unique values."
+            )
+        }
+        self = dict
+    }
+}
+
 extension OrderedSet {
     @inlinable
     public subscript(safe index: Index) -> Element? {

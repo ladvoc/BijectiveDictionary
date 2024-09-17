@@ -194,6 +194,34 @@ func _collection(dict: POCOrderedSetImplementation<String, Int>) {
     }
 }
 
+@Test("Encodable behavior should be equivalent to `Dictionary`")
+func _encodableConformance() throws {
+    let dict = ["A": 1, "B": 2, "C": 3]
+    let bijectiveDict = POCOrderedSetImplementation(dict)
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+    
+    let dictData = try encoder.encode(dict)
+    let dictJSONString = String(decoding: dictData, as: UTF8.self)
+    
+    let bijectiveDictData = try encoder.encode(bijectiveDict)
+    let bijectiveDictJSONString = String(decoding: bijectiveDictData, as: UTF8.self)
+    
+    #expect(dictData == bijectiveDictData)
+    #expect(dictJSONString == bijectiveDictJSONString)
+}
+
+@Test("Decodable behavior should be equivalent to `Dictionary`")
+func _decodableConformance() throws {
+    let jsonData = Data(#"{ "A": 1, "B": 2, "C": 3 }"#.utf8)
+    
+    let decoder = JSONDecoder()
+    let decoded = try decoder.decode(POCOrderedSetImplementation<String, Int>.self, from: jsonData)
+    
+    let control = POCOrderedSetImplementation(["A": 1, "B": 2, "C": 3])
+    #expect(decoded == control)
+}
+
 @Test
 func _findPairByLeft() {
     let dict: POCOrderedSetImplementation = ["A": 1, "B": 2, "C": 3]
