@@ -129,4 +129,17 @@ func _toStandardDictionary(dict: POCOrderedSetImplementation<String, Int>) {
     dict[left: "A", default: 4] += 1
     #expect(dict[left: "A"] == 2, "Should not use default value")
 }
+
+@Test(arguments: [[:], ["A": 1, "B": 2, "C": 3]])
+func _hashable(dict: POCOrderedSetImplementation<String, Int>) {
+    let copy = dict
+    #expect(dict.hashValue == copy.hashValue)
+    #expect(dict == copy)
+    
+    let otherDict: POCOrderedSetImplementation = ["X": 2, "Y": 3, "Z": 4]
+    #expect(dict.hashValue != otherDict.hashValue)
+    #expect(dict != otherDict)
+}
+
+
 #endif
