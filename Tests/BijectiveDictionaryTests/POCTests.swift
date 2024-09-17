@@ -173,4 +173,24 @@ func _removeAll(dict: POCOrderedSetImplementation<String, Int>) {
     
     #expect(dict.remove(byLeft: "D") == nil)
 }
+
+@Test(arguments: [[:], ["A": 1, "B": 2, "C": 3]])
+func _sequence(dict: POCOrderedSetImplementation<String, Int>) {
+    
+    for (leftValue, rightValue) in dict {
+        #expect(dict[left: leftValue] == rightValue)
+        #expect(dict[right: rightValue] == leftValue)
+    }
+}
+
+@Test(arguments: [[:], ["A": 1, "B": 2, "C": 3]])
+func _collection(dict: POCOrderedSetImplementation<String, Int>) {
+    
+    #expect(dict.startIndex <= dict.endIndex)
+    
+    for index in dict.indices {
+        let (leftValue, rightValue) = dict[index]
+        #expect(dict[left: leftValue] == rightValue)
+    }
+}
 #endif

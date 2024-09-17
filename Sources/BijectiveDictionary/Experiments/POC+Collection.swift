@@ -7,8 +7,24 @@
 
 import OrderedCollections
 
-// TODO: Conform to Collection
-extension POCOrderedSetImplementation {
+extension POCOrderedSetImplementation: Collection {
+    public typealias Index = Int
+    public var startIndex: Int { 0 }
+    public var endIndex: Int {
+        assert(_ltr.count == _rtl.count)
+        return _ltr.count
+    }
+    
+    public func index(after index: Int) -> Int {
+        _ltr.index(after: index)
+    }
+    
+    public subscript(position: Int) -> (left: Left, right: Right) {
+        let leftValue = _ltr[position]
+        let rightValue = _rtl[position]
+        return (left: leftValue, right: rightValue)
+    }
+    
     @inlinable public var isEmpty: Bool {
         assert(_ltr.isEmpty == _rtl.isEmpty)
         return _ltr.isEmpty
