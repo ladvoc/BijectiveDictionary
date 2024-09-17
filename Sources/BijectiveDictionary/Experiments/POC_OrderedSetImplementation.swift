@@ -56,12 +56,21 @@ public struct POCOrderedSetImplementation<Left: Hashable, Right: Hashable> {
         _rtl.removeAll(keepingCapacity: keepCapacity)
     }
     
-//    @inlinable public subscript(
-//        left leftValue: Left,
-//        default defaultValue: @autoclosure () -> Right
-//    ) -> Right {
-//        get { }
-//    }
+    @inlinable public subscript(
+        left leftValue: Left,
+        default defaultValue: @autoclosure () -> Right
+    ) -> Right {
+        get { self[left: leftValue] ?? defaultValue() }
+        set(right) { self[left: leftValue] = right }
+    }
+    
+    @inlinable public subscript(
+        right rightValue: Right,
+        default defaultValue: @autoclosure () -> Left
+    ) -> Left {
+        get { self[right: rightValue] ?? defaultValue() }
+        set(left) { self[right: rightValue] = left }
+    }
     
     @inlinable public subscript(left leftValue: Left) -> Right? {
         get {

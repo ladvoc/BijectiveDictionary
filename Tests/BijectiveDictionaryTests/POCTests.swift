@@ -109,4 +109,24 @@ func _toStandardDictionary(dict: POCOrderedSetImplementation<String, Int>) {
     dict[right: 4] = nil
     #expect(dict[right: 4] == nil)
 }
+
+@Test func _subscriptGettersWithDefault() {
+    let dict: POCOrderedSetImplementation = ["A": 1, "B": 2, "C": 3]
+    
+    #expect(dict[left: "D", default: 4] == 4, "Should return default")
+    #expect(dict[left: "A", default: -1] == 1, "Should not return default")
+    
+    #expect(dict[right: 4, default: "D"] == "D", "Should return default")
+    #expect(dict[right: 1, default: "Z"] == "A", "Should not return default")
+}
+
+@Test func _subscriptSettersWithDefault() {
+    var dict: POCOrderedSetImplementation = ["A": 1, "B": 2, "C": 3]
+    
+    dict[left: "D", default: 4] += 1
+    #expect(dict[left: "D"] == 5, "Should use default value")
+    
+    dict[left: "A", default: 4] += 1
+    #expect(dict[left: "A"] == 2, "Should not use default value")
+}
 #endif
