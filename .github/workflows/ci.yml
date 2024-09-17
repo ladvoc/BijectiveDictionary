@@ -31,7 +31,7 @@ jobs:
       - name: Use Swift v6.0
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: "16.0-beta"
+          xcode-version: "16.0"
       - name: Lint
         run: swift package plugin swiftlint --reporter github-actions-logging --strict
       - name: Build
