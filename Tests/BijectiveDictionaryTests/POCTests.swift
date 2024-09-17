@@ -193,4 +193,20 @@ func _collection(dict: POCOrderedSetImplementation<String, Int>) {
         #expect(dict[left: leftValue] == rightValue)
     }
 }
+
+@Test
+func _findPairByLeft() {
+    let dict: POCOrderedSetImplementation = ["A": 1, "B": 2, "C": 3]
+    #expect(dict.findPairByLeft("A")?.left == "A")
+    #expect(dict.findPairByLeft("A")?.right == 1)
+    #expect(dict.findPairByLeft("D") == nil)
+}
+
+@Test
+func _findPairByRight() {
+    let dict: POCOrderedSetImplementation = ["A": 1, "B": 2, "C": 3]
+    #expect(dict.findPairByRight(1)?.left == "A")
+    #expect(dict.findPairByRight(1)?.right == 1)
+    #expect(dict.findPairByRight(4) == nil)
+}
 #endif
