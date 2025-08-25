@@ -9,7 +9,7 @@
 extension BijectiveDictionary: Collection {
     
     /// The position of a left-right pair in a bijective dictionary.
-    @frozen public struct Index: Comparable {
+    @frozen public struct Index: Comparable, Hashable {
         @usableFromInline
         internal let _ltrIndex: DictionaryIndex<Left, Right>
         
@@ -61,6 +61,24 @@ extension BijectiveDictionary: Collection {
             return nil
         }
         return Index(_ltr.index(forKey: leftValue)!)
+    }
+    
+    /// Removes and returns the left-right pair at the specified index.
+    ///
+    /// Calling this method invalidates any existing indices for use with this dictionary.
+    /// 
+    /// - Parameter index: The position of the left-right pair to remove. index must be a valid index of the dictionary,
+    /// and must not equal the dictionary’s end index.
+    /// - Returns: The left-right pair that corresponds to index.
+    ///
+    /// - Complexity: O(*n*), where *n* is the number of left-right pairs in the
+    ///   dictionary.
+    @discardableResult
+    public mutating func remove(at index: Index) -> Element {
+        defer { _invariantCheck() }
+        let removed = _ltr.remove(at: index._ltrIndex)
+        _rtl.removeValue(forKey: removed.value)
+        return (left: removed.key, right: removed.value)
     }
     
     /// A Boolean value that indicates whether the dictionary is empty.

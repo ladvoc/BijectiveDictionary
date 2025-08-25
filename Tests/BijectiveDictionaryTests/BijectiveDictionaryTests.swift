@@ -170,6 +170,16 @@ func removeAll(dict: BijectiveDictionary<String, Int>) {
     #expect(dict.remove(byLeft: "D") == nil)
 }
 
+@Test func removeByIndex() throws {
+    var dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
+    
+    let index = try #require(dict.index(of: ("B", 2)))
+    dict.remove(at: index)
+    
+    #expect(dict[left: "B"] == nil)
+    #expect(dict[right: 2] == nil)
+}
+
 @Test(arguments: [[:], ["A": 1, "B": 2, "C": 3]])
 func sequence(dict: BijectiveDictionary<String, Int>) {
     
