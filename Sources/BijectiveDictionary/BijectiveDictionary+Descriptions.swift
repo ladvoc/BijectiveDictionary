@@ -10,3 +10,9 @@ extension BijectiveDictionary: CustomStringConvertible, CustomDebugStringConvert
     public var description: String { _ltr.description }
     public var debugDescription: String { _ltr.debugDescription }
 }
+
+extension BijectiveDictionary: CustomReflectable {
+    public var customMirror: Mirror {
+        Mirror(self, unlabeledChildren: _ltr, displayStyle: .dictionary)
+    }
+}
