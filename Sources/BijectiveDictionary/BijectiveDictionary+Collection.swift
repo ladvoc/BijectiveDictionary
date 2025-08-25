@@ -38,6 +38,31 @@ extension BijectiveDictionary: Collection {
         Index(_ltr.index(after: i._ltrIndex))
     }
     
+    /// Find the index of a specific element.
+    @inlinable public func index(of element: Element) -> Index? {
+        guard let idx = _ltr.index(forKey: element.left),
+              element.right == _ltr[idx].value else {
+            return nil
+        }
+        return Index(idx)
+    }
+    
+    /// Find the index of a specific element using only the left value.
+    @inlinable public func index(forLeft leftValue: Left) -> Index? {
+        guard let idx = _ltr.index(forKey: leftValue) else {
+            return nil
+        }
+        return Index(idx)
+    }
+    
+    /// Find the index of a specific element using only the right value.
+    @inlinable public func index(forRight rightValue: Right) -> Index? {
+        guard let leftValue = self[right: rightValue] else {
+            return nil
+        }
+        return Index(_ltr.index(forKey: leftValue)!)
+    }
+    
     /// A Boolean value that indicates whether the dictionary is empty.
     @inlinable public var isEmpty: Bool {
         assert(_ltr.isEmpty == _rtl.isEmpty)

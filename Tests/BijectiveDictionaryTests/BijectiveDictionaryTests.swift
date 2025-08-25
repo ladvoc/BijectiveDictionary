@@ -190,6 +190,36 @@ func collection(dict: BijectiveDictionary<String, Int>) {
     }
 }
 
+@Test func indexByPair() throws {
+    let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
+    for (leftValue, rightValue) in dict {
+        let index = try #require(dict.index(of: (leftValue, rightValue)))
+        #expect(dict[index].left == leftValue)
+        #expect(dict[index].right == rightValue)
+    }
+    
+    #expect(dict.index(of: ("D", 4)) == nil)
+    #expect(dict.index(of: ("A", 2)) == nil)
+}
+
+@Test func indexByLeft() throws {
+    let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
+    for (leftValue, rightValue) in dict {
+        let index = try #require(dict.index(forLeft: leftValue))
+        #expect(dict[index].right == rightValue)
+    }
+    #expect(dict.index(forLeft: "D") == nil)
+}
+
+@Test func indexByRight() throws {
+    let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
+    for (leftValue, rightValue) in dict {
+        let index = try #require(dict.index(forRight: rightValue))
+        #expect(dict[index].left == leftValue)
+    }
+    #expect(dict.index(forRight: 4) == nil)
+}
+
 @Test func leftValues() {
     let dict: BijectiveDictionary = ["A": 1, "B": 2, "C": 3]
     #expect(Set(dict.leftValues) == ["A", "B", "C"])
