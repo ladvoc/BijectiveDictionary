@@ -52,3 +52,6 @@ extension BijectiveDictionary: Collection {
         return _ltr.count
     }
 }
+
+extension BijectiveDictionary.Index: Sendable
+where Left: Sendable, Right: Sendable {}
