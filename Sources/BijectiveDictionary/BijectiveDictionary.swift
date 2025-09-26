@@ -53,8 +53,7 @@ public struct BijectiveDictionary<Left: Hashable, Right: Hashable> {
     /// The total number of left-right pairs that the dictionary can contain without
     /// allocating new storage.
     @inlinable public var capacity: Int {
-        assert(_ltr.capacity == _rtl.capacity)
-        return _ltr.capacity
+        return Swift.min(_ltr.capacity, _rtl.capacity)
     }
 
     /// Reserves enough space to store the specified number of left-right pairs.
