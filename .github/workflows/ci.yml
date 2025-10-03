@@ -3,38 +3,42 @@ on:
   pull_request:
   workflow_dispatch:
 jobs:
-  main:
-    name: Build & Test (Swift v${{ matrix.swift }} on ${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+  mac:
+    name: Swift on macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: swift build -v
+      - name: Run tests
+        run: swift test -v
+  linux:
+    name: Swift ${{ matrix.swift }} on Linux
+    runs-on: ubuntu-latest
+    container: swiftlang/swift:nightly-${{ matrix.swift }}-jammy
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        swift: ["5"]
+        swift: ["5.10", "6.1", "6.2"]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: "Use Swift v${{ matrix.swift }}"
-        uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: ${{ matrix.swift }}
-      - name: Display Swift version
-        run: swift --version
+      - uses: actions/checkout@v4
       - name: Build
-        run: swift build
-      # Testing only supported with Swift >= 6.0
-  beta:
-    name: Build & Test (beta)
-    runs-on: macos-14
+        run: swift build -v
+      - name: Run tests
+        if: "${{ matrix.swift != '5' }}"
+        run: swift test -v
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    container: swift:6.1
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Use Swift v6.0
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: "16.0-beta"
+      - uses: actions/checkout@v4
+      - name: Format
+        run: swift format lint **/*.swift -r -s
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    container: ghcr.io/realm/swiftlint:0.56.2
+    steps:
+      - uses: actions/checkout@v4
       - name: Lint
-        run: swift package plugin swiftlint --reporter github-actions-logging --strict
-      - name: Build
-        run: swift build
-      - name: Test
-        run: swift test --enable-swift-testing
+        run: swiftlint
