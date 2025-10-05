@@ -246,3 +246,6 @@ extension BijectiveDictionary: Decodable where Left: Decodable, Right: Decodable
         self = dict
     }
 }
+
+extension BijectiveDictionary: Sendable
+where Left: Sendable, Right: Sendable {}

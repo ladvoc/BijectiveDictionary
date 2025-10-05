@@ -33,3 +33,6 @@ extension BijectiveDictionary.Iterator: IteratorProtocol {
         return element
     }
 }
+
+extension BijectiveDictionary.Iterator: Sendable
+where Left: Sendable, Right: Sendable {}

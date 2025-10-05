@@ -70,3 +70,6 @@ extension BijectiveDictionary {
         }
     }
 }
+
+extension BijectiveDictionary.Conflict: Sendable
+where Left: Sendable, Right: Sendable {}
