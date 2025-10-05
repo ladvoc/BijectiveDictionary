@@ -5,8 +5,10 @@ var dependencies: [Package.Dependency] = []
 var plugins: [Target.PluginUsage]?
 
 #if os(macOS)
-dependencies = [.package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.56.2")]
-plugins = [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
+if Context.environment["CI"] != "true" {
+    dependencies = [.package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.56.2")]
+    plugins = [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
+}
 #endif
 
 let package = Package(
@@ -29,5 +31,5 @@ let package = Package(
             plugins: plugins
         ),
     ],
-    swiftLanguageVersions: [.v6]
+    swiftLanguageModes: [.v6]
 )
